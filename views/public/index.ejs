@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <title>Authentication built for developers — AuthKit</title>
+  <%- include('partials/head') %>
+</head>
+<body>
+
+
+  <!-- ============ MARKETING NAV (EJS partial: layouts/marketing-nav) ============ -->
+  <header class="marketing-nav">
+    <%- include('partials/header') %>
+  </header>
+
+
+  <section class="hero">
+    <div class="container">
+      <div>
+        <div class="pill"><span class="badge badge-primary">New</span> <span>SAML SSO now generally available</span> <svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <h1>Authentication for teams that <span class="grad">ship fast.</span></h1>
+        <p class="lead">AuthKit is a complete user identity platform — sign-in, sign-up, MFA, SSO, and user management — that you can drop into any app in minutes.</p>
+        <div class="cta-row">
+          <a href="/register" class="btn btn-primary btn-lg">Start building free <svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          <a href="/docs" class="btn btn-outline btn-lg"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg> Read the docs</a>
+        </div>
+        <div class="trust">
+          <span>Trusted by 12,000+ developer teams</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="code-card" style="border:0;">
+          <div class="code-tabs">
+            <button class="active">server.js</button>
+            <button>login.tsx</button>
+            <button>curl</button>
+          </div>
+          <pre><span class="cm">// Add authentication in three lines</span>
+          <span class="kw">import</span> { authkit } <span class="kw">from</span> <span class="st">"@authkit/node"</span>;
+
+          <span class="kw">const</span> auth = <span class="fn">authkit</span>({ apiKey: process.env.<span class="num">AUTHKIT_KEY</span> });
+
+          app.<span class="fn">post</span>(<span class="st">"/login"</span>, <span class="kw">async</span> (req, res) =&gt; {
+            <span class="kw">const</span> session = <span class="kw">await</span> auth.sessions.<span class="fn">create</span>({
+              email: req.body.email,
+              password: req.body.password,
+            });
+            res.<span class="fn">json</span>({ token: session.token });
+          });</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Platform</div>
+        <h2>Everything you need to authenticate users</h2>
+        <p>Built by the team behind some of the largest developer platforms. Every primitive you need, none of the ones you don't.</p>
+      </div>
+
+      <div class="features">
+        <div class="feature">
+          <div class="ficon"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <h3>Enterprise-grade security</h3>
+          <p>SOC 2 Type II, GDPR, and HIPAA compliant. MFA, session revocation, and passwordless out of the box.</p>
+        </div>
+
+        <div class="feature">
+          <div class="ficon"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <h3>Ship auth in 5 minutes</h3>
+          <p>Drop-in SDKs for Node, Python, Go, and React. Pre-built UI widgets that match your brand.</p>
+        </div>
+
+        <div class="feature">
+          <div class="ficon"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <h3>Complete user management</h3>
+          <p>User profiles, orgs, roles, permissions, and invitations — all through a beautiful dashboard.</p>
+        </div>
+
+        <div class="feature">
+          <div class="ficon"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 16.98h-5.99c-1.1 0-1.95.94-2.48 1.9A4 4 0 0 1 2 17c.01-.7.2-1.4.57-2"/><path d="m6 17 3.13-5.78c.53-.97.1-2.18-.5-3.1a4 4 0 1 1 6.89-4.06"/><path d="m12 6 3.13 5.73C15.66 12.7 16.9 13 18 13a4 4 0 0 1 0 8"/></svg></div>
+          <h3>Real-time webhooks</h3>
+          <p>React to sign-ups, sign-ins, MFA events, and role changes with signed, retryable webhooks.</p>
+        </div>
+
+        <div class="feature">
+          <div class="ficon"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 2l-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-2 2"/><path d="m18 5 3 3"/></svg></div>
+          <h3>Fine-grained API keys</h3>
+          <p>Scoped keys with IP restrictions, expirations, and full audit trails. Rotate in one click.</p>
+        </div>
+
+        <div class="feature">
+          <div class="ficon"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 10 6-10 6L2 8l10-6z"/><path d="m2 14 10 6 10-6M2 20l10 6 10-6"/></svg></div>
+          <h3>SSO & SAML included</h3>
+          <p>SAML 2.0, OIDC, and social providers — including Google, GitHub, Microsoft, and Apple.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Workflow</div>
+        <h2>Integrate in 4 steps</h2>
+      </div>
+      
+      <div class="steps">
+        <div class="step"><div class="num">01 —</div><h4>Create a project</h4><p>Sign up and grab your API keys from the dashboard.</p></div>
+        <div class="step"><div class="num">02 —</div><h4>Install the SDK</h4><p>One line of code in Node, Python, Go, or React.</p></div>
+        <div class="step"><div class="num">03 —</div><h4>Drop in the widget</h4><p>Pre-built, themable login and sign-up UI.</p></div>
+        <div class="step"><div class="num">04 —</div><h4>Ship & monitor</h4><p>Watch sign-ins, MFA challenges, and webhooks live.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <div class="card card-lg">
+        <div class="big-stats">
+          <div><div class="n">1.2B+</div><div class="l">Authentications processed</div></div>
+          <div><div class="n">99.99%</div><div class="l">Historical uptime</div></div>
+          <div><div class="n">180+</div><div class="l">Countries served</div></div>
+          <div><div class="n">SOC 2</div><div class="l">Type II certified</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">FAQ</div>
+        <h2>Common questions</h2>
+      </div>
+      
+      <div class="faq">
+        <details open><summary>Do you support enterprise SSO?</summary><p>Yes. AuthKit ships with SAML 2.0, OIDC, and SCIM 2.0 for identity providers including Okta, Azure AD, Google Workspace, and JumpCloud.</p></details>
+        <details><summary>How is my data protected?</summary><p>All data is encrypted at rest with AES-256 and in transit with TLS 1.3. We are SOC 2 Type II and ISO 27001 certified, and offer HIPAA BAAs on Enterprise plans.</p></details>
+        <details><summary>Can I self-host AuthKit?</summary><p>Yes — a self-hosted deployment is available on the Enterprise plan, including Kubernetes and Docker distributions with air-gapped support.</p></details>
+        <details><summary>What frameworks are supported?</summary><p>First-class SDKs for React, Vue, Next.js, Node.js, Python, Go, Ruby, and .NET, plus a REST API and OpenAPI spec for anything else.</p></details>
+        <details><summary>Is there a free plan?</summary><p>Yes. The Free plan includes up to 5,000 monthly active users, unlimited passwordless auth, and full email/password support.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <div class="cta-banner">
+        <h2>Ship secure auth today.</h2>
+        <p>Start free — no credit card required. Upgrade only when you're ready.</p>
+        <a href="/register" class="btn btn-primary btn-lg">Create your workspace <svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ FOOTER (EJS partial: layouts/footer) ============ -->
+  <footer class="footer">
+    <%- include('partials/footer') %>
+  </footer>
+
+
+  <script src="/assets/js/app.js"></script>
+</body>
+</html>

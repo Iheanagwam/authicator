@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Verify email — AuthKit</title>
+<meta name="description" content="AuthKit — drop-in authentication, users, and access control for modern apps." />
+<link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/base.css" />
+<link rel="stylesheet" href="/assets/css/components.css" />
+<link rel="stylesheet" href="/assets/css/layout.css" />
+<link rel="stylesheet" href="/assets/css/pages.css" />
+
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-form-panel" style="position:relative;">
+    <a href="/" class="brand">
+      <span class="logo">A</span>
+      <span>AuthKit</span>
+    </a>
+    
+<form class="auth-form" onsubmit="AuthKit.toast('Verifying…');" method="post"
+  action="/verify-email">
+  <div>
+    <h1>Verify your email</h1>
+    <p class="subtitle">We sent a 6-digit code to <strong style="color:var(--text);"><%=email%></strong>. Enter it below to continue.</p>
+  </div>
+
+  <div class="otp">
+    <input name="otp1" inputmode="numeric" maxlength="1" autofocus /><input name="otp2" inputmode="numeric" maxlength="1" /><input name="otp3" inputmode="numeric" maxlength="1" /><input name="otp4" inputmode="numeric" maxlength="1" /><input name="otp5" inputmode="numeric" maxlength="1" /><input name="otp6" inputmode="numeric" maxlength="1" />
+  </div>
+
+  <div class="field">
+    <input type="text" class="input" name="email" value="<%=email%>" hidden />
+  </div>
+
+  <button class="btn btn-primary btn-lg btn-block" type="submit">Verify & continue <svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  <div class="foot">Didn't get it? <a href="#" class="text-primary">Resend code</a> · <a href="#" class="text-primary">Change email</a></div>
+</form>
+
+  </div>
+  <div class="auth-side">
+    <div class="auth-side-content">
+      <span class="badge badge-primary badge-dot">Live</span>
+      <h2>Almost there.</h2>
+      <p>Verifying your email keeps your workspace and end-users safer from account-takeover attacks.</p>
+      
+    </div>
+  </div>
+</div>
+
+<script src="/assets/js/app.js"></script>
+</body>
+</html>

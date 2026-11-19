@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AuthKit Widget Test</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f9fafb;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container { text-align: center; max-width: 480px; padding: 2rem; }
+    h1 { font-size: 24px; color: #111827; margin-bottom: 8px; }
+    p { color: #6b7280; margin-bottom: 2rem; font-size: 15px; }
+    .buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    button { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; border: none; }
+    .btn-primary { background: #3b82f6; color: #fff; }
+    .btn-primary:hover { background: #2563eb; }
+    .btn-secondary { background: #fff; color: #374151; border: 1px solid #d1d5db; }
+    .btn-secondary:hover { background: #f3f4f6; }
+    .btn-danger { background: #fee2e2; color: #b91c1c; }
+    #status {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #374151;
+      text-align: left;
+      display: none;
+    }
+    #status h3 { font-size: 12px; color: #9ca3af; margin-bottom: 8px; text-transform: uppercase; }
+    #status pre { white-space: pre-wrap; word-break: break-all; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Developer's App</h1>
+    <p>This simulates a developer's app using the AuthKit widget. Replace the API key with your real one.</p>
+    <div class="buttons">
+      <button class="btn-primary" id="btn-login">Sign in</button>
+      <button class="btn-secondary" id="btn-register">Create account</button>
+      <button class="btn-danger" id="btn-logout">Logout</button>
+    </div>
+    <div id="status">
+      <h3>Event log</h3>
+      <pre id="status-text"></pre>
+    </div>
+  </div>
+
+  <script
+  src="widget.js"
+  data-api-key="ak_live_your_key_here"
+  data-primary="#6366f1"
+  data-primary-hover="#4f46e5"
+  data-bg="#1e1e2e"
+  data-overlay="rgba(0,0,0,0.7)"
+  data-text="#cdd6f4"
+  data-text-secondary="#9399b2"
+  data-text-muted="#6c7086"
+  data-input-bg="#313244"
+  data-input-border="#45475a"
+  data-input-text="#cdd6f4"
+  data-input-border-focus="#6366f1"
+  data-border="#313244"
+  data-fields='[{"name":"date_of_birth","label":"Date of Birth","type":"date","required":true}]'
+></script>
+
+  <script>
+    const log = (name, detail) => {
+      document.getElementById('status').style.display = 'block';
+      document.getElementById('status-text').textContent =
+        `Event: ${name}\n\n${JSON.stringify(detail, null, 2)}`;
+    };
+
+    window.addEventListener('authkit:ready', () => console.log('[AuthKit] Ready'));
+    window.addEventListener('authkit:login', (e) => log('authkit:login', e.detail));
+    window.addEventListener('authkit:register', (e) => log('authkit:register', e.detail));
+    window.addEventListener('authkit:logout', () => {
+      log('authkit:logout', {});
+      document.getElementById('status').style.display = 'none';
+    });
+
+    document.getElementById('btn-login').addEventListener('click', () => AuthKit.open('login'));
+    document.getElementById('btn-register').addEventListener('click', () => AuthKit.open('register'));
+    document.getElementById('btn-logout').addEventListener('click', () => AuthKit.logout());
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+

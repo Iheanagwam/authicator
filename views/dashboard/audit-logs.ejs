@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Audit logs — AuthKit</title>
+<meta name="description" content="AuthKit — drop-in authentication, users, and access control for modern apps." />
+<link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/base.css" />
+<link rel="stylesheet" href="/assets/css/components.css" />
+<link rel="stylesheet" href="/assets/css/layout.css" />
+<link rel="stylesheet" href="/assets/css/pages.css" />
+
+</head>
+<body>
+
+  <div class="app">
+    <!-- ============ SIDEBAR (EJS partial: layouts/sidebar) ============ -->
+    <aside class="sidebar">
+      <%- include('partials/sidebar') %>
+    </aside>
+
+    <div class="main">
+      <!-- ============ TOPBAR (EJS partial: layouts/topbar) ============ -->
+      <header class="topbar">
+        <%- include('partials/header') %>
+      </header>
+
+      <main class="page">
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/app/overview.html">Dashboard</a><span class="sep">/</span><span class="current">Audit logs</span></nav>
+        
+        <div class="page-head">
+          <div>
+            <h1>Audit logs</h1>
+            <p>Every action taken against your project, with 90 days of retention.</p>
+          </div>
+          
+          <div class="page-actions"><button class="btn btn-secondary"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5M12 15V3"/></svg>Export</button></div>
+        </div>
+
+        <div class="table-wrap">
+          <div class="table-toolbar">
+            <div class="input-icon" style="flex:1;max-width:320px;"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input class="input" placeholder="Search events, actors, IPs..." /></div>
+            <div class="row">
+              <select class="select btn-sm" style="width:auto;"><option>All events</option><option>Sign-in</option><option>MFA</option><option>API</option></select>
+              <select class="select btn-sm" style="width:auto;"><option>Last 24h</option><option>Last 7d</option><option>Last 30d</option></select>
+            </div>
+          </div>
+          
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Event</th>
+                <th>Actor</th>
+                <th>IP</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <!-- logs.forEach(log => …) -->
+            <tbody>
+              <%logs.forEach((log, ind) =>{%>
+                <tr>
+                  <td class="dim mono">
+                    <%=log.createdAt.toLocaleDateString("en-US", {month: "short", day: "numeric"})%>, <%=log.createdAt.toLocaleTimeString("en-US", {hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false})%>
+                  </td>
+                  <td><span class="badge"><%=log.action%></span></td>
+                  <td>sofia@acme.io</td>
+                  <td class="mono"><%=log.ipAddress%></td>
+                  <td><span class="badge badge-success badge-dot">Success</span></td>
+                </tr>
+              <%})%>
+            </tbody>
+          </table>
+          <div class="pagination"><span>Showing 1–7 of 24,181</span><div class="pages"><button>‹</button><button class="active">1</button><button>2</button><button>3</button><button>›</button></div></div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+<script src="/assets/js/app.js"></script>
+</body>
+</html>

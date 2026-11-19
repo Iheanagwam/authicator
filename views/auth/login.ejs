@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sign in — AuthKit</title>
+<meta name="description" content="AuthKit — drop-in authentication, users, and access control for modern apps." />
+<link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/base.css" />
+<link rel="stylesheet" href="/assets/css/components.css" />
+<link rel="stylesheet" href="/assets/css/layout.css" />
+<link rel="stylesheet" href="/assets/css/pages.css" />
+
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-form-panel" style="position:relative;">
+    <a href="/" class="brand">
+      <span class="logo">A</span>
+      <span>AuthKit</span>
+    </a>
+    
+    <form action="/login" method="POST" class="auth-form" onsubmit="AuthKit.toast('Signing in…');" 
+      data-fetch data-success="Login successful" data-error="Login failed" data-redirect="/dashboard">
+      <div>
+        <h1>Welcome back</h1>
+        <p class="subtitle">Sign in to your AuthKit workspace to continue.</p>
+      </div>
+
+      <div class="social">
+        <button disabled type="button" class="btn btn-secondary"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> Google</button>
+        <button disabled type="button" class="btn btn-secondary"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg> GitHub</button>
+      </div>
+      <div class="divider-text">or continue with email</div>
+
+      <div class="field">
+        <label for="email">Work email</label>
+        <div class="input-icon">
+          <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+          <input name="email" class="input" id="email" type="email" placeholder="you@company.com" required autocomplete="email" />
+        </div>
+      </div>
+      
+      <div class="field">
+        <div class="between"><label for="password">Password</label><a href="/forgot-password" style="font-size:12px;" class="text-primary">Forgot?</a></div>
+        <div class="input-group">
+          <input name="password" class="input" id="password" type="password" placeholder="••••••••" required autocomplete="current-password" />
+          <button type="button" class="input-affix" data-pw-toggle aria-label="Show password">
+            <svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <label class="checkbox"><input name="keepSignedIn" type="checkbox" checked /> Keep me signed in for 30 days</label>
+
+      <button class="btn btn-primary btn-lg btn-block" type="submit">Sign in <svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+
+      <div class="foot">Don't have an account? <a href="/register">Create one</a></div>
+    </form>
+  </div>
+
+  <div class="auth-side">
+    <div class="auth-side-content">
+      <span class="badge badge-primary badge-dot">Live</span>
+      <h2>Your identity infrastructure, always on.</h2>
+      <p>Monitor sign-ins, MFA challenges, and webhooks across every environment — from a single, beautiful control plane.</p>
+      
+      <div class="auth-preview">
+        <div class="row-item"><span class="dot"></span><strong style="color:var(--text);">1,284 users authenticated today</strong><span class="dim" style="margin-left:auto;">Live</span></div>
+        <div class="row-item"><span class="dot" style="background:var(--warning);"></span><span>3 MFA challenges pending</span></div>
+        <div class="row-item"><span class="dot"></span><span>Webhook delivery: 99.97%</span></div>
+        <div class="row-item"><span class="dot"></span><span>API latency: p95 · 42ms</span></div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="/assets/js/app.js"></script>
+</body>
+</html>

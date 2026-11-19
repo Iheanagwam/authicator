@@ -1,0 +1,67 @@
+<button class="btn btn-icon btn-ghost mobile-toggle" data-sidebar-mobile aria-label="Toggle menu"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+
+<button class="btn btn-icon btn-ghost" data-sidebar-collapse aria-label="Collapse sidebar" id="sidebarCollapse"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+
+<div class="search">
+  <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+  <input class="input" placeholder="Search users, webhooks, logs..." />
+  <kbd>⌘K</kbd>
+</div>
+
+<div class="spacer"></div>
+<div class="topbar-actions">
+  <button class="btn btn-icon btn-ghost" data-theme-toggle aria-label="Toggle theme"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></button>
+  
+  <div class="dropdown">
+    <button class="btn btn-icon btn-ghost" data-dropdown aria-label="Notifications">
+      <svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+      <span class="dot"></span>
+    </button>
+    <div class="dropdown-menu" style="min-width:320px;">
+      <div class="label">Notifications <!-- notifications.count --></div>
+      <a href="#"><div><strong style="font-size:12px;">New sign-in from Berlin</strong><div class="dim" style="font-size:11px;">User: sofia@acme.io · 2m ago</div></div></a>
+      <a href="#"><div><strong style="font-size:12px;">Webhook failed 3x</strong><div class="dim" style="font-size:11px;">wh_prod_billing · 12m ago</div></div></a>
+      <a href="#"><div><strong style="font-size:12px;">API key rotated</strong><div class="dim" style="font-size:11px;">by you · 1h ago</div></div></a>
+      <div class="sep"></div>
+      <a href="#" class="text-primary" style="justify-content:center;">View all</a>
+    </div>
+  </div>
+
+  <div class="dropdown">
+    <button class="profile-btn" data-dropdown>
+      <span class="avatar">JD</span>
+      <span class="name"><!-- user.name --><Jamie Doe></span>
+      <svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    
+    <div class="dropdown-menu">
+      <div class="label">Signed in as</div>
+      <div style="padding:2px 10px 8px;">
+        <div style="font-size:13px;"><%=developer.email%></div>
+        <div class="dim" style="font-size:11px;"><!-- user.email --><%=developer.email%></div>
+        <span class="badge badge-primary" style="margin-top:6px;">Developer</span>
+      </div>
+      <div class="sep"></div>
+      <a href="/dashboard/settings">
+        <svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> 
+        Profile
+      </a>
+
+      <a href="/dashboard/settings">
+        <svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.36.87 1.16 1.44 2 1.5H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+
+      <a href="/doc" target="_blank">
+        <svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg> 
+        Documentation
+      </a>
+
+      <div class="sep"></div>
+      <a href="/logout">
+        <svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg> 
+        Sign out
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AuthKit Widget Builder</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f3f4f6; color: #111827; min-height: 100vh; }
+
+    header { background: #fff; border-bottom: 1px solid #e5e7eb; padding: 1rem 1.5rem; display: flex; align-items: center; gap: 10px; }
+    header svg { width: 22px; height: 22px; flex-shrink: 0; }
+    header h1 { font-size: 16px; font-weight: 600; }
+    header span { font-size: 13px; color: #6b7280; margin-left: auto; }
+
+    .layout { display: grid; grid-template-columns: 360px 1fr; min-height: calc(100vh - 57px); }
+
+    .panel { background: #fff; border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; overflow: hidden; }
+    .panel-tabs { display: flex; border-bottom: 1px solid #e5e7eb; flex-shrink: 0; }
+    .panel-tab { flex: 1; padding: 12px; font-size: 13px; font-weight: 500; border: none; background: none; cursor: pointer; color: #6b7280; border-bottom: 2px solid transparent; transition: all 0.15s; }
+    .panel-tab.active { color: #3b82f6; border-bottom-color: #3b82f6; }
+    .panel-body { flex: 1; overflow-y: auto; padding: 1.25rem; }
+
+    .section { margin-bottom: 1.5rem; }
+    .section-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: #9ca3af; margin-bottom: 10px; }
+
+    .row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; }
+    .row-label { font-size: 13px; color: #374151; font-weight: 500; }
+    .row-hint { font-size: 11px; color: #9ca3af; display: block; margin-top: 1px; }
+
+    .color-wrap { display: flex; align-items: center; gap: 6px; border: 1px solid #e5e7eb; border-radius: 6px; padding: 3px 7px; background: #f9fafb; }
+    .color-wrap input[type="color"] { width: 22px; height: 22px; border: none; border-radius: 3px; cursor: pointer; padding: 0; background: none; }
+    .color-wrap input[type="text"] { width: 70px; border: none; background: none; font-size: 12px; font-family: monospace; color: #374151; outline: none; }
+
+    .text-ctrl { width: 130px; padding: 5px 8px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 12px; background: #f9fafb; outline: none; }
+    .text-ctrl:focus { border-color: #3b82f6; }
+
+    .presets { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 1.25rem; }
+    .preset-btn { padding: 7px 10px; border-radius: 7px; border: 1.5px solid #e5e7eb; font-size: 12px; font-weight: 500; cursor: pointer; background: #fff; display: flex; align-items: center; gap: 6px; transition: all 0.15s; }
+    .preset-btn:hover { border-color: #3b82f6; color: #3b82f6; }
+    .preset-btn.active { border-color: #3b82f6; background: #eff6ff; color: #1d4ed8; }
+    .pdot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+    /* Field builder */
+    .field-card { border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+    .field-card-head { display: flex; align-items: center; padding: 9px 10px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; gap: 8px; cursor: pointer; }
+    .field-card-name { font-size: 13px; font-weight: 500; flex: 1; color: #111827; }
+    .field-card-badge { font-size: 11px; color: #6b7280; background: #e5e7eb; padding: 2px 7px; border-radius: 10px; }
+    .field-card-del { background: none; border: none; cursor: pointer; color: #fca5a5; font-size: 18px; line-height: 1; padding: 0 2px; transition: color 0.15s; }
+    .field-card-del:hover { color: #ef4444; }
+    .field-card-body { padding: 10px; display: none; }
+    .field-card-body.open { display: block; }
+
+    .mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .mini-field { margin-bottom: 8px; }
+    .mini-label { display: block; font-size: 11px; font-weight: 500; color: #6b7280; margin-bottom: 3px; }
+    .mini-input, .mini-select { width: 100%; padding: 5px 8px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 12px; background: #fff; outline: none; color: #111827; }
+    .mini-input:focus, .mini-select:focus { border-color: #3b82f6; }
+
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .toggle-label { font-size: 12px; color: #374151; }
+    .toggle { position: relative; width: 32px; height: 17px; display: inline-block; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-track { position: absolute; inset: 0; background: #d1d5db; border-radius: 17px; cursor: pointer; transition: 0.2s; }
+    .toggle-track:before { content: ''; position: absolute; width: 13px; height: 13px; left: 2px; top: 2px; background: #fff; border-radius: 50%; transition: 0.2s; }
+    .toggle input:checked + .toggle-track { background: #3b82f6; }
+    .toggle input:checked + .toggle-track:before { transform: translateX(15px); }
+
+    .opts-section { margin-top: 4px; }
+    .opt-row { display: flex; gap: 5px; margin-bottom: 5px; }
+    .opt-input { flex: 1; padding: 4px 7px; border: 1px solid #e5e7eb; border-radius: 5px; font-size: 12px; outline: none; }
+    .opt-input:focus { border-color: #3b82f6; }
+    .opt-del { background: none; border: none; color: #fca5a5; cursor: pointer; font-size: 16px; padding: 0 3px; }
+    .opt-del:hover { color: #ef4444; }
+    .add-opt { width: 100%; padding: 4px; border: 1px dashed #d1d5db; border-radius: 5px; font-size: 11px; color: #6b7280; cursor: pointer; background: none; transition: all 0.15s; }
+    .add-opt:hover { border-color: #3b82f6; color: #3b82f6; }
+
+    .add-field { width: 100%; padding: 9px; border: 1.5px dashed #d1d5db; border-radius: 8px; background: none; font-size: 13px; color: #6b7280; cursor: pointer; transition: all 0.15s; margin-top: 4px; }
+    .add-field:hover { border-color: #3b82f6; color: #3b82f6; background: #f8faff; }
+    .field-counter { font-size: 11px; color: #9ca3af; text-align: center; margin-top: 6px; }
+
+    .empty-state { text-align: center; padding: 2rem 1rem; color: #9ca3af; font-size: 13px; }
+
+    .fixed-fields { border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; margin-bottom: 1.5rem; }
+    .fixed-field-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid #f3f4f6; }
+    .fixed-field-row:last-child { border-bottom: none; }
+    .fixed-field-name { font-size: 13px; font-weight: 500; color: #374151; }
+    .fixed-field-badge { font-size: 11px; color: #6b7280; background: #f3f4f6; padding: 2px 8px; border-radius: 10px; }
+
+    /* Preview */
+    .preview-panel { display: flex; flex-direction: column; }
+    .preview-header { padding: 12px 1.5rem; background: #fff; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; }
+    .preview-header h2 { font-size: 14px; font-weight: 600; }
+    .preview-tabs { display: flex; gap: 3px; background: #f3f4f6; padding: 3px; border-radius: 6px; }
+    .preview-tabs button { padding: 4px 11px; border: none; border-radius: 4px; font-size: 12px; cursor: pointer; background: none; color: #6b7280; transition: all 0.15s; }
+    .preview-tabs button.active { background: #fff; color: #111827; box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-weight: 500; }
+    .preview-canvas { flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 2rem; overflow-y: auto; }
+    .widget-card { width: 100%; max-width: 370px; border-radius: 12px; padding: 1.75rem; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+
+    /* Preview form elements */
+    .pv-field { margin-bottom: 11px; }
+    .pv-label { display: block; font-size: 12px; font-weight: 500; margin-bottom: 4px; }
+    .pv-input { width: 100%; padding: 8px 11px; font-size: 13px; border-radius: 7px; border: 1px solid #d1d5db; outline: none; box-sizing: border-box; background: #fff; color: #111827; }
+    .pv-select { width: 100%; padding: 8px 11px; font-size: 13px; border-radius: 7px; border: 1px solid #d1d5db; outline: none; box-sizing: border-box; background: #fff; color: #111827; }
+    .pv-btn { width: 100%; padding: 9px; border: none; border-radius: 7px; font-size: 13px; font-weight: 500; cursor: default; }
+    .pv-tabs { display: flex; overflow: hidden; margin-bottom: 1.25rem; }
+    .pv-tab { flex: 1; padding: 7px; font-size: 12px; font-weight: 500; border: none; cursor: default; }
+    .req-star { color: #ef4444; }
+
+    /* Code */
+    .code-section { border-top: 1px solid #e5e7eb; background: #fff; flex-shrink: 0; }
+    .code-header { padding: 10px 1.5rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e5e7eb; }
+    .code-header h3 { font-size: 13px; font-weight: 600; }
+    .copy-btn { padding: 5px 12px; background: #111827; color: #fff; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; }
+    .copy-btn:hover { background: #374151; }
+    .copy-btn.copied { background: #15803d; }
+    pre { padding: 0.875rem 1.5rem; font-size: 11.5px; line-height: 1.8; overflow-x: auto; background: #f9fafb; max-height: 155px; }
+    code { font-family: 'Fira Code', monospace; color: #374151; }
+    .ca { color: #7c3aed; }
+    .cv { color: #15803d; }
+    .ct { color: #1d4ed8; }
+  </style>
+</head>
+<body>
+
+<header>
+  <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+  </svg>
+  <h1>AuthKit Widget Builder</h1>
+  <span>Customize theme and fields — copy your embed code</span>
+</header>
+
+<div class="layout">
+
+  <!-- LEFT PANEL -->
+  <div class="panel">
+    <div class="panel-tabs">
+      <button class="panel-tab active" id="ptab-theme">🎨 Theme</button>
+      <button class="panel-tab" id="ptab-fields">⚙️ Fields</button>
+    </div>
+
+    <!-- THEME TAB -->
+    <div class="panel-body" id="tab-theme">
+      <div class="section">
+        <div class="section-title">Presets</div>
+        <div class="presets">
+          <button class="preset-btn active" id="preset-default"><span class="pdot" style="background:#3b82f6"></span>Default</button>
+          <button class="preset-btn" id="preset-dark"><span class="pdot" style="background:#6366f1"></span>Dark</button>
+          <button class="preset-btn" id="preset-purple"><span class="pdot" style="background:#7c3aed"></span>Purple</button>
+          <button class="preset-btn" id="preset-green"><span class="pdot" style="background:#16a34a"></span>Green</button>
+          <button class="preset-btn" id="preset-rose"><span class="pdot" style="background:#e11d48"></span>Rose</button>
+          <button class="preset-btn" id="preset-orange"><span class="pdot" style="background:#ea580c"></span>Orange</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Brand</div>
+        <div class="row"><div><div class="row-label">App name</div><span class="row-hint">Shows in widget footer</span></div><input type="text" class="text-ctrl" id="c-app-name" value="My App"/></div>
+        <div class="row"><div><div class="row-label">Border radius</div><span class="row-hint">Buttons, inputs, modal</span></div><input type="text" class="text-ctrl" id="c-radius" value="8px"/></div>
+        <div class="row"><div><div class="row-label">Overlay</div><span class="row-hint">Backdrop behind modal</span></div><input type="text" class="text-ctrl" id="c-overlay" value="rgba(0,0,0,0.5)"/></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Colors</div>
+        <div class="row"><div><div class="row-label">Primary</div><span class="row-hint">Buttons, links, active tab</span></div><div class="color-wrap"><input type="color" id="col-primary" value="#3b82f6"/><input type="text" class="hex" data-col="col-primary" value="#3b82f6" maxlength="7"/></div></div>
+        <div class="row"><div><div class="row-label">Primary hover</div></div><div class="color-wrap"><input type="color" id="col-primary-hover" value="#2563eb"/><input type="text" class="hex" data-col="col-primary-hover" value="#2563eb" maxlength="7"/></div></div>
+        <div class="row"><div><div class="row-label">Button text</div></div><div class="color-wrap"><input type="color" id="col-primary-text" value="#ffffff"/><input type="text" class="hex" data-col="col-primary-text" value="#ffffff" maxlength="7"/></div></div>
+        <div class="row"><div><div class="row-label">Modal background</div></div><div class="color-wrap"><input type="color" id="col-bg" value="#ffffff"/><input type="text" class="hex" data-col="col-bg" value="#ffffff" maxlength="7"/></div></div>
+        <div class="row"><div><div class="row-label">Main text</div></div><div class="color-wrap"><input type="color" id="col-text" value="#111827"/><input type="text" class="hex" data-col="col-text" value="#111827" maxlength="7"/></div></div>
+        <div class="row"><div><div class="row-label">Secondary text</div><span class="row-hint">Labels, subtitles</span></div><div class="color-wrap"><input type="color" id="col-text-secondary" value="#6b7280"/><input type="text" class="hex" data-col="col-text-secondary" value="#6b7280" maxlength="7"/></div></div>
+        <div class="row"><div><div class="row-label">Muted text</div><span class="row-hint">Placeholders, footer</span></div><div class="color-wrap"><input type="color" id="col-text-muted" value="#9ca3af"/><input type="text" class="hex" data-col="col-text-muted" value="#9ca3af" maxlength="7"/></div></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Inputs</div>
+        <div class="row"><div><div class="row-label">Input background</div></div><div class="color-wrap"><input type="color" id="col-input-bg" value="#ffffff"/><input type="text" class="hex" data-col="col-input-bg" value="#ffffff" maxlength="7"/></div></div>
+        <div class="row"><div><div class="row-label">Input border</div></div><div class="color-wrap"><input type="color" id="col-input-border" value="#d1d5db"/><input type="text" class="hex" data-col="col-input-border" value="#d1d5db" maxlength="7"/></div></div>
+        <div class="row"><div><div class="row-label">Input text</div></div><div class="color-wrap"><input type="color" id="col-input-text" value="#111827"/><input type="text" class="hex" data-col="col-input-text" value="#111827" maxlength="7"/></div></div>
+        <div class="row"><div><div class="row-label">Focus border</div></div><div class="color-wrap"><input type="color" id="col-input-focus" value="#3b82f6"/><input type="text" class="hex" data-col="col-input-focus" value="#3b82f6" maxlength="7"/></div></div>
+        <div class="row"><div><div class="row-label">Card border</div><span class="row-hint">Tabs, dividers</span></div><div class="color-wrap"><input type="color" id="col-border" value="#e5e7eb"/><input type="text" class="hex" data-col="col-border" value="#e5e7eb" maxlength="7"/></div></div>
+      </div>
+    </div>
+
+    <!-- FIELDS TAB -->
+    <div class="panel-body" id="tab-fields" style="display:none;">
+      <div class="section">
+        <div class="section-title">Always included</div>
+        <div class="fixed-fields">
+          <div class="fixed-field-row"><span class="fixed-field-name">Email</span><span class="fixed-field-badge">email · required</span></div>
+          <div class="fixed-field-row"><span class="fixed-field-name">Password</span><span class="fixed-field-badge">password · required</span></div>
+          <div class="fixed-field-row"><span class="fixed-field-name">Confirm Password</span><span class="fixed-field-badge">register only</span></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Custom fields</div>
+        <p style="font-size:12px;color:#6b7280;margin-bottom:12px;">Extra fields shown on the register form. Stored in the end user's metadata.</p>
+        <div id="field-list"></div>
+        <button class="add-field" id="add-field-btn">+ Add field</button>
+        <p class="field-counter" id="field-counter"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: PREVIEW + CODE -->
+  <div class="preview-panel">
+    <div class="preview-header">
+      <h2>Live preview</h2>
+      <div class="preview-tabs">
+        <button class="active" id="pvtab-login">Sign in</button>
+        <button id="pvtab-register">Register</button>
+        <button id="pvtab-forgot">Forgot</button>
+      </div>
+    </div>
+
+    <div class="preview-canvas" id="canvas">
+      <div class="widget-card" id="preview-card">
+
+        <div style="text-align:center;margin-bottom:1.25rem;">
+          <div id="pv-logo" style="width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin:0 auto 0.6rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" id="pv-logo-svg" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <p id="pv-subtitle" style="margin:0;font-size:13px;"></p>
+        </div>
+
+        <div id="pv-tabs" class="pv-tabs" style="border-radius:8px;overflow:hidden;border:1px solid #e5e7eb;">
+          <button id="pv-tab-login" class="pv-tab">Sign in</button>
+          <button id="pv-tab-reg" class="pv-tab">Create account</button>
+        </div>
+
+        <!-- Login -->
+        <div id="pv-login">
+          <div class="pv-field"><label class="pv-label" id="pvl-email">Email</label><input class="pv-input" type="text" placeholder="name@example.com" readonly/></div>
+          <div class="pv-field">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+              <label class="pv-label" id="pvl-pass" style="margin:0;">Password</label>
+              <a id="pv-forgot-link" href="#" style="font-size:11px;text-decoration:none;" onclick="return false">Forgot password?</a>
+            </div>
+            <input class="pv-input" type="password" placeholder="••••••••" readonly/>
+          </div>
+          <button class="pv-btn" id="pv-btn-login">Sign in</button>
+        </div>
+
+        <!-- Register -->
+        <div id="pv-register" style="display:none;">
+          <div class="pv-field"><label class="pv-label" id="pvr-email">Email</label><input class="pv-input" type="text" placeholder="name@example.com" readonly/></div>
+          <div class="pv-field"><label class="pv-label" id="pvr-pass">Password</label><input class="pv-input" type="password" placeholder="Min. 8 characters" readonly/></div>
+          <div class="pv-field"><label class="pv-label" id="pvr-confirm">Confirm password</label><input class="pv-input" type="password" placeholder="••••••••" readonly/></div>
+          <div id="pv-custom-fields"></div>
+          <button class="pv-btn" id="pv-btn-reg">Create account</button>
+        </div>
+
+        <!-- Forgot -->
+        <div id="pv-forgot" style="display:none;">
+          <div class="pv-field"><label class="pv-label" id="pvf-email">Email</label><input class="pv-input" type="text" placeholder="name@example.com" readonly/></div>
+          <button class="pv-btn" id="pv-btn-forgot">Send reset link</button>
+        </div>
+
+        <p id="pv-footer" style="text-align:center;font-size:11px;margin-top:1rem;margin-bottom:0;">Protected by <span id="pv-footer-name" style="font-weight:500;"></span></p>
+      </div>
+    </div>
+
+    <div class="code-section">
+      <div class="code-header">
+        <h3>Embed code</h3>
+        <button class="copy-btn" id="copy-btn">Copy</button>
+      </div>
+      <pre><code id="code-out"></code></pre>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
+var fields = [];
+var fieldId = 0;
+var activePreviewTab = 'login';
+
+var DEFAULTS = {
+  appName:'My App', radius:'8px', overlay:'rgba(0,0,0,0.5)',
+  primary:'#3b82f6', primaryHover:'#2563eb', primaryText:'#ffffff',
+  bg:'#ffffff', text:'#111827', textSecondary:'#6b7280', textMuted:'#9ca3af',
+  inputBg:'#ffffff', inputBorder:'#d1d5db', inputText:'#111827',
+  inputFocus:'#3b82f6', border:'#e5e7eb'
+};
+
+var PRESETS = {
+  'default': Object.assign({}, DEFAULTS),
+  'dark':    { appName:'My App', radius:'8px', overlay:'rgba(0,0,0,0.7)', primary:'#6366f1', primaryHover:'#4f46e5', primaryText:'#ffffff', bg:'#1e1e2e', text:'#cdd6f4', textSecondary:'#9399b2', textMuted:'#6c7086', inputBg:'#313244', inputBorder:'#45475a', inputText:'#cdd6f4', inputFocus:'#6366f1', border:'#313244' },
+  'purple':  { appName:'My App', radius:'10px', overlay:'rgba(76,29,149,0.35)', primary:'#7c3aed', primaryHover:'#6d28d9', primaryText:'#ffffff', bg:'#faf5ff', text:'#1e1b4b', textSecondary:'#6b21a8', textMuted:'#a78bfa', inputBg:'#ffffff', inputBorder:'#ddd6fe', inputText:'#1e1b4b', inputFocus:'#7c3aed', border:'#ede9fe' },
+  'green':   { appName:'My App', radius:'6px', overlay:'rgba(0,0,0,0.45)', primary:'#16a34a', primaryHover:'#15803d', primaryText:'#ffffff', bg:'#f0fdf4', text:'#14532d', textSecondary:'#166534', textMuted:'#86efac', inputBg:'#ffffff', inputBorder:'#bbf7d0', inputText:'#14532d', inputFocus:'#16a34a', border:'#dcfce7' },
+  'rose':    { appName:'My App', radius:'12px', overlay:'rgba(0,0,0,0.5)', primary:'#e11d48', primaryHover:'#be123c', primaryText:'#ffffff', bg:'#fff1f2', text:'#881337', textSecondary:'#9f1239', textMuted:'#fda4af', inputBg:'#ffffff', inputBorder:'#fecdd3', inputText:'#881337', inputFocus:'#e11d48', border:'#ffe4e6' },
+  'orange':  { appName:'My App', radius:'8px', overlay:'rgba(0,0,0,0.5)', primary:'#ea580c', primaryHover:'#c2410c', primaryText:'#ffffff', bg:'#fff7ed', text:'#7c2d12', textSecondary:'#9a3412', textMuted:'#fdba74', inputBg:'#ffffff', inputBorder:'#fed7aa', inputText:'#7c2d12', inputFocus:'#ea580c', border:'#ffedd5' }
+};
+
+/* ═══════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════ */
+function getVal(id) { return document.getElementById(id) ? document.getElementById(id).value : ''; }
+function setVal(id, v) { if (document.getElementById(id)) document.getElementById(id).value = v; }
+function el(id) { return document.getElementById(id); }
+
+function getTheme() {
+  return {
+    appName:      getVal('c-app-name') || 'AuthKit',
+    radius:       getVal('c-radius') || '8px',
+    overlay:      getVal('c-overlay') || 'rgba(0,0,0,0.5)',
+    primary:      getVal('hex-primary') || '#3b82f6',
+    primaryHover: getVal('hex-primary-hover') || '#2563eb',
+    primaryText:  getVal('hex-primary-text') || '#ffffff',
+    bg:           getVal('hex-bg') || '#ffffff',
+    text:         getVal('hex-text') || '#111827',
+    textSecondary:getVal('hex-text-secondary') || '#6b7280',
+    textMuted:    getVal('hex-text-muted') || '#9ca3af',
+    inputBg:      getVal('hex-input-bg') || '#ffffff',
+    inputBorder:  getVal('hex-input-border') || '#d1d5db',
+    inputText:    getVal('hex-input-text') || '#111827',
+    inputFocus:   getVal('hex-input-focus') || '#3b82f6',
+    border:       getVal('hex-border') || '#e5e7eb'
+  };
+}
+
+/* ═══════════════════════════════════════
+   PANEL TAB SWITCHING
+═══════════════════════════════════════ */
+el('ptab-theme').addEventListener('click', function() {
+  el('tab-theme').style.display = 'block';
+  el('tab-fields').style.display = 'none';
+  el('ptab-theme').classList.add('active');
+  el('ptab-fields').classList.remove('active');
+});
+
+el('ptab-fields').addEventListener('click', function() {
+  el('tab-fields').style.display = 'block';
+  el('tab-theme').style.display = 'none';
+  el('ptab-fields').classList.add('active');
+  el('ptab-theme').classList.remove('active');
+});
+
+/* ═══════════════════════════════════════
+   COLOR INPUTS — sync color picker ↔ hex text
+═══════════════════════════════════════ */
+// Map each color picker id to its hex input id
+var COLOR_MAP = {
+  'col-primary':       'hex-primary',
+  'col-primary-hover': 'hex-primary-hover',
+  'col-primary-text':  'hex-primary-text',
+  'col-bg':            'hex-bg',
+  'col-text':          'hex-text',
+  'col-text-secondary':'hex-text-secondary',
+  'col-text-muted':    'hex-text-muted',
+  'col-input-bg':      'hex-input-bg',
+  'col-input-border':  'hex-input-border',
+  'col-input-text':    'hex-input-text',
+  'col-input-focus':   'hex-input-focus',
+  'col-border':        'hex-border'
+};
+
+// Create hidden hex inputs linked to each color picker
+(function setupColorInputs() {
+  var hexInputs = document.querySelectorAll('input.hex');
+  hexInputs.forEach(function(hexEl) {
+    var colId = hexEl.getAttribute('data-col');
+    var colEl = el(colId);
+
+    // Give the hex input a proper id
+    hexEl.id = 'hex-' + colId.replace('col-', '');
+
+    // Color picker changes hex text
+    colEl.addEventListener('input', function() {
+      hexEl.value = colEl.value;
+      clearActivePreset();
+      updateAll();
+    });
+
+    // Hex text changes color picker
+    hexEl.addEventListener('input', function() {
+      if (/^#[0-9a-fA-F]{6}$/.test(hexEl.value)) {
+        colEl.value = hexEl.value;
+      }
+      clearActivePreset();
+      updateAll();
+    });
+  });
+
+  // Text controls
+  ['c-app-name','c-radius','c-overlay'].forEach(function(id) {
+    el(id).addEventListener('input', updateAll);
+  });
+})();
+
+function clearActivePreset() {
+  document.querySelectorAll('.preset-btn').forEach(function(b) { b.classList.remove('active'); });
+}
+
+/* ═══════════════════════════════════════
+   PRESETS
+═══════════════════════════════════════ */
+Object.keys(PRESETS).forEach(function(name) {
+  el('preset-' + name).addEventListener('click', function() {
+    applyPreset(name);
+  });
+});
+
+function applyPreset(name) {
+  var p = PRESETS[name];
+  if (!p) return;
+
+  setVal('c-app-name', p.appName);
+  setVal('c-radius', p.radius);
+  setVal('c-overlay', p.overlay);
+
+  var keys = ['primary','primaryHover','primaryText','bg','text','textSecondary','textMuted','inputBg','inputBorder','inputText','inputFocus','border'];
+  var colIds = ['primary','primary-hover','primary-text','bg','text','text-secondary','text-muted','input-bg','input-border','input-text','input-focus','border'];
+
+  keys.forEach(function(key, i) {
+    var val = p[key];
+    var colEl = el('col-' + colIds[i]);
+    var hexEl = el('hex-' + colIds[i]);
+    if (colEl && val && val.startsWith('#')) colEl.value = val;
+    if (hexEl) hexEl.value = val || '';
+  });
+
+  document.querySelectorAll('.preset-btn').forEach(function(b) { b.classList.remove('active'); });
+  el('preset-' + name).classList.add('active');
+  updateAll();
+}
+
+/* ═══════════════════════════════════════
+   FIELD BUILDER
+═══════════════════════════════════════ */
+el('add-field-btn').addEventListener('click', function() {
+  if (fields.length >= 15) { alert('Maximum 15 custom fields allowed'); return; }
+  var id = ++fieldId;
+  fields.push({ id: id, name: '', label: '', type: 'text', required: false, placeholder: '', showOn: 'register', options: [] });
+  renderFieldList();
+  // Open the new card
+  setTimeout(function() { toggleCard(id); }, 30);
+  updateAll();
+});
+
+function removeField(id) {
+  fields = fields.filter(function(f) { return f.id !== id; });
+  renderFieldList();
+  updateAll();
+}
+
+function toggleCard(id) {
+  var body = el('fb-body-' + id);
+  if (!body) return;
+  body.classList.toggle('open');
+}
+
+function updateFieldProp(id, key, value) {
+  var f = fields.find(function(f) { return f.id === id; });
+  if (!f) return;
+  f[key] = value;
+
+  // Auto-generate name from label
+  if (key === 'label' && !f._nameTouched) {
+    f.name = value.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+    var nameEl = el('fb-name-' + id);
+    if (nameEl) nameEl.value = f.name;
+  }
+  if (key === 'name') f._nameTouched = true;
+
+  // Show/hide options section
+  if (key === 'type') {
+    var optsEl = el('fb-opts-' + id);
+    if (optsEl) optsEl.style.display = value === 'select' ? 'block' : 'none';
+  }
+
+  // Update card header
+  var titleEl = el('fb-title-' + id);
+  var badgeEl = el('fb-badge-' + id);
+  if (titleEl) titleEl.textContent = f.label || 'Untitled field';
+  if (badgeEl) badgeEl.textContent = f.type + (f.required ? ' · required' : '');
+
+  updateAll();
+}
+
+function addOption(fieldId) {
+  var f = fields.find(function(f) { return f.id === fieldId; });
+  if (f) { f.options.push(''); renderOptions(fieldId); }
+}
+
+function removeOption(fieldId, idx) {
+  var f = fields.find(function(f) { return f.id === fieldId; });
+  if (f) { f.options.splice(idx, 1); renderOptions(fieldId); }
+}
+
+function updateOption(fieldId, idx, value) {
+  var f = fields.find(function(f) { return f.id === fieldId; });
+  if (f) { f.options[idx] = value; updateAll(); }
+}
+
+function renderOptions(fieldId) {
+  var container = el('fb-opt-list-' + fieldId);
+  if (!container) return;
+  var f = fields.find(function(f) { return f.id === fieldId; });
+  if (!f) return;
+  container.innerHTML = f.options.map(function(opt, idx) {
+    return '<div class="opt-row">' +
+      '<input class="opt-input" type="text" value="' + escHtml(opt) + '" placeholder="Option ' + (idx+1) + '" ' +
+        'onchange="updateOption(' + fieldId + ',' + idx + ',this.value)"/>' +
+      '<button class="opt-del" onclick="removeOption(' + fieldId + ',' + idx + ')">×</button>' +
+    '</div>';
+  }).join('');
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function renderFieldList() {
+  var container = el('field-list');
+  var counter = el('field-counter');
+
+  if (fields.length === 0) {
+    container.innerHTML = '<div class="empty-state">No custom fields yet. Click below to add one.</div>';
+    counter.textContent = '';
+    return;
+  }
+
+  container.innerHTML = fields.map(function(f) {
+    return '<div class="field-card" id="fb-card-' + f.id + '">' +
+      '<div class="field-card-head" onclick="toggleCard(' + f.id + ')">' +
+        '<span class="field-card-name" id="fb-title-' + f.id + '">' + escHtml(f.label || 'Untitled field') + '</span>' +
+        '<span class="field-card-badge" id="fb-badge-' + f.id + '">' + f.type + (f.required ? ' · required' : '') + '</span>' +
+        '<button class="field-card-del" onclick="event.stopPropagation();removeField(' + f.id + ')">×</button>' +
+      '</div>' +
+      '<div class="field-card-body" id="fb-body-' + f.id + '">' +
+        '<div class="mini-grid">' +
+          '<div class="mini-field"><label class="mini-label">Label</label>' +
+            '<input class="mini-input" type="text" value="' + escHtml(f.label) + '" placeholder="Full Name" ' +
+              'oninput="updateFieldProp(' + f.id + ',\'label\',this.value)"/></div>' +
+          '<div class="mini-field"><label class="mini-label">Field key (name)</label>' +
+            '<input class="mini-input" type="text" id="fb-name-' + f.id + '" value="' + escHtml(f.name) + '" placeholder="fullName" ' +
+              'oninput="updateFieldProp(' + f.id + ',\'name\',this.value)"/></div>' +
+        '</div>' +
+        '<div class="mini-grid">' +
+          '<div class="mini-field"><label class="mini-label">Type</label>' +
+            '<select class="mini-select" onchange="updateFieldProp(' + f.id + ',\'type\',this.value)">' +
+              ['text','email','tel','number','select','checkbox','date'].map(function(t) {
+                return '<option value="' + t + '"' + (f.type === t ? ' selected' : '') + '>' + t + '</option>';
+              }).join('') +
+            '</select></div>' +
+          '<div class="mini-field"><label class="mini-label">Show on</label>' +
+            '<select class="mini-select" onchange="updateFieldProp(' + f.id + ',\'showOn\',this.value)">' +
+              '<option value="register"' + (f.showOn === 'register' ? ' selected' : '') + '>Register only</option>' +
+              '<option value="both"' + (f.showOn === 'both' ? ' selected' : '') + '>Login + Register</option>' +
+            '</select></div>' +
+        '</div>' +
+        '<div class="mini-field"><label class="mini-label">Placeholder</label>' +
+          '<input class="mini-input" type="text" value="' + escHtml(f.placeholder || '') + '" placeholder="e.g. Enter your name" ' +
+            'oninput="updateFieldProp(' + f.id + ',\'placeholder\',this.value)"/></div>' +
+        '<div class="toggle-row"><span class="toggle-label">Required</span>' +
+          '<label class="toggle"><input type="checkbox" ' + (f.required ? 'checked' : '') + ' ' +
+            'onchange="updateFieldProp(' + f.id + ',\'required\',this.checked)"/><span class="toggle-track"></span></label></div>' +
+        '<div id="fb-opts-' + f.id + '" style="display:' + (f.type === 'select' ? 'block' : 'none') + '">' +
+          '<div class="mini-label" style="margin-bottom:6px;">Options</div>' +
+          '<div class="opts-section"><div id="fb-opt-list-' + f.id + '"></div>' +
+            '<button class="add-opt" onclick="addOption(' + f.id + ')">+ Add option</button></div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  // Populate option lists
+  fields.forEach(function(f) { if (f.type === 'select') renderOptions(f.id); });
+  counter.textContent = fields.length + ' / 15 fields';
+}
+
+/* ═══════════════════════════════════════
+   PREVIEW TAB SWITCHING
+═══════════════════════════════════════ */
+el('pvtab-login').addEventListener('click', function() { setPreviewTab('login'); });
+el('pvtab-register').addEventListener('click', function() { setPreviewTab('register'); });
+el('pvtab-forgot').addEventListener('click', function() { setPreviewTab('forgot'); });
+
+function setPreviewTab(tab) {
+  activePreviewTab = tab;
+  ['login','register','forgot'].forEach(function(t) {
+    el('pvtab-' + t).classList.toggle('active', t === tab);
+    el('pv-' + t).style.display = t === tab ? 'block' : 'none';
+  });
+  el('pv-tabs').style.display = tab === 'forgot' ? 'none' : 'flex';
+  updateAll();
+}
+
+/* ═══════════════════════════════════════
+   LIVE PREVIEW UPDATE
+═══════════════════════════════════════ */
+function updateAll() {
+  var v = getTheme();
+  applyThemeToPreview(v);
+  renderCustomFieldsPreview(v);
+  generateCode(v);
+}
+
+function applyThemeToPreview(v) {
+  var card = el('preview-card');
+  var r = v.radius;
+
+  el('canvas').style.background = '#f3f4f6';
+  card.style.background = v.bg;
+  card.style.borderRadius = 'calc(' + r + ' * 1.5)';
+
+  // Logo
+  el('pv-logo').style.background = v.primary + '22';
+  el('pv-logo').style.borderRadius = r;
+  el('pv-logo-svg').setAttribute('stroke', v.primary);
+
+  // Subtitle
+  var subs = { login:'Sign in to continue', register:'Create your account', forgot:'Reset your password' };
+  el('pv-subtitle').textContent = subs[activePreviewTab];
+  el('pv-subtitle').style.color = v.textSecondary;
+
+  // Tabs
+  el('pv-tabs').style.border = '1px solid ' + v.border;
+  el('pv-tabs').style.borderRadius = r;
+  var isL = activePreviewTab === 'login';
+  var isR = activePreviewTab === 'register';
+  el('pv-tab-login').style.background = isL ? v.primary : 'transparent';
+  el('pv-tab-login').style.color = isL ? v.primaryText : v.textSecondary;
+  el('pv-tab-reg').style.background = isR ? v.primary : 'transparent';
+  el('pv-tab-reg').style.color = isR ? v.primaryText : v.textSecondary;
+
+  // Labels
+  ['pvl-email','pvl-pass','pvr-email','pvr-pass','pvr-confirm','pvf-email'].forEach(function(id) {
+    if (el(id)) el(id).style.color = v.textSecondary;
+  });
+
+  // Inputs
+  document.querySelectorAll('.pv-input, .pv-select').forEach(function(inp) {
+    inp.style.background = v.inputBg;
+    inp.style.borderColor = v.inputBorder;
+    inp.style.color = v.inputText;
+    inp.style.borderRadius = r;
+  });
+
+  // Forgot link
+  if (el('pv-forgot-link')) el('pv-forgot-link').style.color = v.primary;
+
+  // Buttons
+  ['pv-btn-login','pv-btn-reg','pv-btn-forgot'].forEach(function(id) {
+    if (el(id)) {
+      el(id).style.background = v.primary;
+      el(id).style.color = v.primaryText;
+      el(id).style.borderRadius = r;
+    }
+  });
+
+  // Footer
+  el('pv-footer').style.color = v.textMuted;
+  el('pv-footer-name').textContent = v.appName;
+  el('pv-footer-name').style.color = v.primary;
+}
+
+function renderCustomFieldsPreview(v) {
+  var container = el('pv-custom-fields');
+  if (!container) return;
+
+  var regFields = fields.filter(function(f) { return f.showOn === 'register' || f.showOn === 'both'; });
+
+  if (regFields.length === 0) { container.innerHTML = ''; return; }
+
+  container.innerHTML = regFields.map(function(f) {
+    var label = '<label class="pv-label" style="color:' + v.textSecondary + '">' +
+      escHtml(f.label || 'Field') +
+      (f.required ? '<span class="req-star">*</span>' : '') +
+      '</label>';
+
+    var inputStyle = 'background:' + v.inputBg + ';border-color:' + v.inputBorder + ';color:' + v.inputText + ';border-radius:' + v.radius;
+
+    if (f.type === 'checkbox') {
+      return '<div class="pv-field" style="display:flex;align-items:center;gap:8px;">' +
+        '<input type="checkbox" disabled/>' +
+        '<span style="font-size:13px;color:' + v.text + '">' + escHtml(f.label || 'Checkbox') +
+        (f.required ? '<span class="req-star">*</span>' : '') + '</span></div>';
+    }
+
+    if (f.type === 'select') {
+      var opts = (f.options || []).map(function(o) { return '<option>' + escHtml(o) + '</option>'; }).join('');
+      return '<div class="pv-field">' + label +
+        '<select class="pv-select" style="' + inputStyle + '">' +
+        '<option>' + escHtml(f.placeholder || 'Select...') + '</option>' + opts +
+        '</select></div>';
+    }
+
+    return '<div class="pv-field">' + label +
+      '<input class="pv-input" type="' + f.type + '" placeholder="' + escHtml(f.placeholder || '') + '" readonly style="' + inputStyle + '"/>' +
+      '</div>';
+  }).join('');
+}
+
+/* ═══════════════════════════════════════
+   CODE GENERATION
+═══════════════════════════════════════ */
+function generateCode(v) {
+  var D = DEFAULTS;
+  var lines = ['<span class="ct">&lt;script</span>'];
+  lines.push('  <span class="ca">src</span>=<span class="cv">"https://yourdomain.com/widget/widget.js"</span>');
+  lines.push('  <span class="ca">data-api-key</span>=<span class="cv">"ak_live_your_key_here"</span>');
+
+  if (v.appName !== D.appName)        lines.push('  <span class="ca">data-app-name</span>=<span class="cv">"' + v.appName + '"</span>');
+  if (v.primary !== D.primary)        lines.push('  <span class="ca">data-primary</span>=<span class="cv">"' + v.primary + '"</span>');
+  if (v.primaryHover !== D.primaryHover) lines.push('  <span class="ca">data-primary-hover</span>=<span class="cv">"' + v.primaryHover + '"</span>');
+  if (v.primaryText !== D.primaryText)   lines.push('  <span class="ca">data-primary-text</span>=<span class="cv">"' + v.primaryText + '"</span>');
+  if (v.bg !== D.bg)                  lines.push('  <span class="ca">data-bg</span>=<span class="cv">"' + v.bg + '"</span>');
+  if (v.overlay !== D.overlay)        lines.push('  <span class="ca">data-overlay</span>=<span class="cv">"' + v.overlay + '"</span>');
+  if (v.text !== D.text)              lines.push('  <span class="ca">data-text</span>=<span class="cv">"' + v.text + '"</span>');
+  if (v.textSecondary !== D.textSecondary) lines.push('  <span class="ca">data-text-secondary</span>=<span class="cv">"' + v.textSecondary + '"</span>');
+  if (v.textMuted !== D.textMuted)    lines.push('  <span class="ca">data-text-muted</span>=<span class="cv">"' + v.textMuted + '"</span>');
+  if (v.inputBg !== D.inputBg)        lines.push('  <span class="ca">data-input-bg</span>=<span class="cv">"' + v.inputBg + '"</span>');
+  if (v.inputBorder !== D.inputBorder) lines.push('  <span class="ca">data-input-border</span>=<span class="cv">"' + v.inputBorder + '"</span>');
+  if (v.inputText !== D.inputText)    lines.push('  <span class="ca">data-input-text</span>=<span class="cv">"' + v.inputText + '"</span>');
+  if (v.inputFocus !== D.inputFocus)  lines.push('  <span class="ca">data-input-border-focus</span>=<span class="cv">"' + v.inputFocus + '"</span>');
+  if (v.border !== D.border)          lines.push('  <span class="ca">data-border</span>=<span class="cv">"' + v.border + '"</span>');
+  if (v.radius !== D.radius)          lines.push('  <span class="ca">data-radius</span>=<span class="cv">"' + v.radius + '"</span>');
+
+  var validFields = fields.filter(function(f) { return f.name && f.label; });
+  if (validFields.length > 0) {
+    var cleaned = validFields.map(function(f) {
+      var obj = { name: f.name, label: f.label, type: f.type };
+      if (f.required) obj.required = true;
+      if (f.placeholder) obj.placeholder = f.placeholder;
+      if (f.showOn !== 'register') obj.showOn = f.showOn;
+      if (f.type === 'select' && f.options.length) obj.options = f.options.filter(Boolean);
+      return obj;
+    });
+    lines.push("  <span class='ca'>data-fields</span>=<span class='cv'>'" + JSON.stringify(cleaned) + "'</span>");
+  }
+
+  lines.push('<span class="ct">&gt;&lt;/script&gt;</span>');
+  el('code-out').innerHTML = lines.join('\n');
+}
+
+el('copy-btn').addEventListener('click', function() {
+  var raw = el('code-out').innerText;
+  navigator.clipboard.writeText(raw).then(function() {
+    el('copy-btn').textContent = 'Copied!';
+    el('copy-btn').classList.add('copied');
+    setTimeout(function() {
+      el('copy-btn').textContent = 'Copy';
+      el('copy-btn').classList.remove('copied');
+    }, 2000);
+  });
+});
+
+// Init
+applyPreset('default');
+renderFieldList();
+</script>
+</body>
+</html>

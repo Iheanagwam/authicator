@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <title>Pricing — AuthKit</title>
+  <%- include('partials/head') %>
+</head>
+<body>
+
+
+<!-- ============ MARKETING NAV (EJS partial: layouts/marketing-nav) ============ -->
+<header class="marketing-nav">
+  <%- include('partials/header') %>
+</header>
+
+<section class="section" style="padding-top:60px;">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Pricing</div>
+      <h2>Simple, developer-friendly pricing</h2>
+      <p>Start free. Scale as you grow. Every plan includes unlimited team members and full API access.</p>
+    </div>
+    <div class="pricing-grid">
+<div class="pricing-card ">
+  <div>
+    <h3 style="font-family:var(--font-heading);font-size:18px;">Free</h3>
+    <p class="muted" style="font-size:13px;margin-top:6px;">For side projects and prototypes.</p>
+  </div>
+  <div class="price">$0<small></small></div>
+  <a href="/auth/register.html" class="btn btn-secondary btn-lg btn-block">Start free</a>
+  <ul><li><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg><span>Up to 5,000 MAUs</span></li>
+<li><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg><span>Email + password</span></li>
+<li><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg><span>Social logins</span></li>
+<li><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg><span>Community support</span></li>
+<li><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg><span>Basic audit logs</span></li></ul>
+</div>
+
+<div class="pricing-card featured">
+  <div>
+    <h3 style="font-family:var(--font-heading);font-size:18px;">Pro</h3>
+    <p class="muted" style="font-size:13px;margin-top:6px;">For growing teams shipping to production.</p>
+  </div>
+  <div class="price">$49<small> /month</small></div>
+  <a href="/auth/register.html" class="btn btn-primary btn-lg btn-block">Start 14-day trial</a>
+  <ul><li><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg><span>Up to 50,000 MAUs</span></li>
+<li><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg><span>MFA (TOTP + WebAuthn)</span></li>
+<li><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg><span>Unlimited social providers</span></li>
+<li><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg><span>Webhooks & audit logs</span></li>
+<li><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg><span>Priority support</span></li>
+<li><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg><span>Custom domains</span></li></ul>
+</div>
+
+<div class="pricing-card ">
+  <div>
+    <h3 style="font-family:var(--font-heading);font-size:18px;">Enterprise</h3>
+    <p class="muted" style="font-size:13px;margin-top:6px;">For companies with compliance needs.</p>
+  </div>
+  <div class="price">Custom<small></small></div>
+  <a href="#" class="btn btn-secondary btn-lg btn-block">Contact sales</a>
+  <ul><li><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg><span>Unlimited MAUs</span></li>
+<li><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg><span>SAML SSO & SCIM</span></li>
+<li><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg><span>Advanced RBAC</span></li>
+<li><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg><span>99.99% SLA</span></li>
+<li><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg><span>Dedicated support</span></li>
+<li><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg><span>Self-hosting option</span></li></ul>
+</div>
+</div>
+
+    <div style="margin-top:60px;max-width:800px;margin-inline:auto;">
+      <h3 style="text-align:center;margin-bottom:24px;font-size:20px;">Compare all features</h3>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Feature</th><th>Free</th><th>Pro</th><th>Enterprise</th></tr></thead>
+          <tbody>
+            <tr><td>Monthly Active Users</td><td>5,000</td><td>50,000</td><td>Unlimited</td></tr>
+            <tr><td>MFA (TOTP + WebAuthn)</td><td>—</td><td><svg class="text-success" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></td><td><svg class="text-success" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></td></tr>
+            <tr><td>SAML SSO</td><td>—</td><td>—</td><td><svg class="text-success" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></td></tr>
+            <tr><td>Custom domains</td><td>—</td><td><svg class="text-success" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></td><td><svg class="text-success" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></td></tr>
+            <tr><td>Audit logs retention</td><td>7 days</td><td>90 days</td><td>Unlimited</td></tr>
+            <tr><td>SLA</td><td>—</td><td>99.9%</td><td>99.99%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="cta-banner">
+      <h2>Talk to our team</h2>
+      <p>Need volume pricing, procurement help, or a security review? We're here.</p>
+      <a href="#" class="btn btn-primary btn-lg">Contact sales</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER (EJS partial: layouts/footer) ============ -->
+<footer class="footer">
+  <%- include('partials/footer') %>
+</footer>
+
+
+<script src="/assets/js/app.js"></script>
+</body>
+</html>

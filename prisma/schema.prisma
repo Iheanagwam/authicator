@@ -1,0 +1,108 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Developer {
+  id           String     @id @default(uuid())
+  email        String     @unique
+  password     String
+  isVerified   Boolean    @default(false)
+  isSuperAdmin Boolean    @default(false)
+  fullname     String?
+  zipcode      String?
+  country      String?
+  phone        String?
+  domain       String?
+  accessKey    String?
+  verifyToken  String?
+  resetToken   String?
+  resetExpiry  DateTime?
+  apiKey       String     @unique
+  appName      String?
+  fieldConfig  Json?
+  emailConfig  Json?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  endUsers     EndUser[]
+  webhooks     Webhook[]
+  auditLogs    AuditLog[]
+}
+
+model EndUser {
+  id           String    @id @default(uuid())
+  email        String
+  password     String
+  isVerified   Boolean   @default(false)
+  verifyToken  String?
+  resetToken   String?
+  resetExpiry  DateTime?
+  refreshToken String?
+  metadata     Json?
+  developerId  String
+  developer    Developer @relation(fields: [developerId], references: [id], onDelete: Cascade)
+  sessions     Session[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@unique([email, developerId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  endUserId    String
+  refreshToken String
+  userAgent    String?
+  ipAddress    String?
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime
+  endUser      EndUser  @relation(fields: [endUserId], references: [id], onDelete: Cascade)
+}
+
+model Webhook {
+  id          String            @id @default(uuid())
+  developerId String
+  url         String
+  secret      String
+  events      String[]
+  isActive    Boolean           @default(true)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  developer   Developer         @relation(fields: [developerId], references: [id], onDelete: Cascade)
+  deliveries  WebhookDelivery[]
+}
+
+model WebhookDelivery {
+  id          String    @id @default(uuid())
+  webhookId   String
+  event       String
+  payload     Json
+  response    String?
+  statusCode  Int?
+  success     Boolean   @default(false)
+  attempts    Int       @default(0)
+  deliveredAt DateTime?
+  createdAt   DateTime  @default(now())
+  webhook     Webhook   @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id          String    @id @default(uuid())
+  developerId String
+  endUserId   String?
+  action      String
+  ipAddress   String?
+  userAgent   String?
+  metadata    Json?
+  createdAt   DateTime  @default(now())
+  developer   Developer @relation(fields: [developerId], references: [id], onDelete: Cascade)
+}

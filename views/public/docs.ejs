@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <title>Documentation — AuthKit</title>
+  <%- include('partials/head') %>
+</head>
+<body>
+
+<!-- ============ MARKETING NAV (EJS partial: layouts/marketing-nav) ============ -->
+<header class="marketing-nav">
+  <%- include('partials/header') %>
+</header>
+
+<div class="container">
+<div class="docs-shell">
+  <aside class="docs-side">
+    <h5>Getting started</h5>
+    <a href="#" class="active">Introduction</a>
+    <a href="#">Quickstart</a>
+    <a href="#">SDKs</a>
+    <h5>Authentication</h5>
+    <a href="#">Sessions</a>
+    <a href="#">Passwordless</a>
+    <a href="#">Multi-factor</a>
+    <a href="#">Social providers</a>
+    <h5>Users & Orgs</h5>
+    <a href="#">User model</a>
+    <a href="#">Organizations</a>
+    <a href="#">Roles & permissions</a>
+    <h5>Advanced</h5>
+    <a href="#">Webhooks</a>
+    <a href="#">Custom claims</a>
+    <a href="#">Rate limits</a>
+  </aside>
+
+  <article class="docs-content">
+    <div class="eyebrow">Documentation</div>
+    <h1 id="intro">Introduction</h1>
+    <p>AuthKit is a complete identity platform for modern applications. This guide walks you through everything from installing the SDK to configuring SAML SSO.</p>
+
+    <h2 id="install">Installation</h2>
+    <p>Install the AuthKit Node SDK from npm. First-class SDKs are also available for Python, Go, Ruby, and .NET.</p>
+    <div class="code">
+      <button class="copy-btn" data-copy="npm install @authkit/node"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy</button>
+      <pre><span class="cm"># Install the SDK</span>
+npm install @authkit/node</pre>
+    </div>
+
+    <h2 id="quickstart">Quickstart</h2>
+    <p>Initialize the client with your project's API key. You can find it in your <a href="/app/settings.html" class="text-primary">dashboard settings</a>.</p>
+    <div class="code">
+      <button class="copy-btn" data-copy="#code-init"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy</button>
+<pre id="code-init"><span class="kw">import</span> { authkit } <span class="kw">from</span> <span class="st">"@authkit/node"</span>;
+
+<span class="kw">const</span> auth = <span class="fn">authkit</span>({
+  apiKey: process.env.<span class="num">AUTHKIT_KEY</span>,
+  environment: <span class="st">"production"</span>,
+});</pre>
+    </div>
+
+    <h2 id="sessions">Creating a session</h2>
+    <p>Sessions represent an authenticated user. Create one after verifying credentials.</p>
+    <div class="code">
+      <button class="copy-btn" data-copy="#code-session"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy</button>
+<pre id="code-session"><span class="kw">const</span> session = <span class="kw">await</span> auth.sessions.<span class="fn">create</span>({
+  userId: user.id,
+  ipAddress: req.ip,
+  userAgent: req.headers[<span class="st">"user-agent"</span>],
+});</pre>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:24px;">
+      <svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <div><strong>Tip.</strong> Store the session token as an httpOnly cookie in production. AuthKit signs and verifies tokens automatically.</div>
+    </div>
+
+    <h2 id="webhooks">Handling webhooks</h2>
+    <p>Subscribe to real-time events like <code>user.created</code>, <code>session.revoked</code>, and <code>mfa.enrolled</code>. All webhook payloads are signed with HMAC SHA-256.</p>
+  </article>
+
+  <aside class="docs-toc">
+    <h5>On this page</h5>
+    <a href="#intro">Introduction</a>
+    <a href="#install">Installation</a>
+    <a href="#quickstart">Quickstart</a>
+    <a href="#sessions">Creating a session</a>
+    <a href="#webhooks">Handling webhooks</a>
+  </aside>
+</div>
+</div>
+
+<!-- ============ FOOTER (EJS partial: layouts/footer) ============ -->
+<footer class="footer">
+  <%- include('partials/footer') %>
+</footer>
+
+
+<script src="/assets/js/app.js"></script>
+</body>
+</html>

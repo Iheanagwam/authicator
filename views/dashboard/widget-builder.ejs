@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Widget builder — AuthKit</title>
+<meta name="description" content="AuthKit — drop-in authentication, users, and access control for modern apps." />
+<link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/base.css" />
+<link rel="stylesheet" href="/assets/css/components.css" />
+<link rel="stylesheet" href="/assets/css/layout.css" />
+<link rel="stylesheet" href="/assets/css/pages.css" />
+
+<!-- ============ THEME BUILDER ============ -->
+<style>
+  .tb-wrap { display: grid; grid-template-columns: 380px 1fr; gap: 16px; align-items: start; }
+  @media (max-width: 1100px) { .tb-wrap { grid-template-columns: 1fr; } }
+
+  .tb-panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: calc(100vh - 100px); }
+  .tb-tabs { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .tb-tab { flex: 1; padding: 12px; font-size: 13px; font-weight: 500; border: none; background: transparent; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; transition: all .15s; }
+  .tb-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+  .tb-body { flex: 1; overflow-y: auto; padding: 18px; }
+
+  .tb-section { margin-bottom: 22px; }
+  .tb-section-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 10px; }
+
+  .tb-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; gap: 10px; }
+  .tb-row-label { font-size: 13px; color: var(--fg); font-weight: 500; }
+  .tb-row-hint { font-size: 11px; color: var(--muted); display: block; margin-top: 2px; }
+
+  .tb-color-wrap { display: flex; align-items: center; gap: 6px; border: 1px solid var(--border); border-radius: 6px; padding: 3px 7px; background: var(--bg); }
+  .tb-color-wrap input[type="color"] { width: 22px; height: 22px; border: none; border-radius: 3px; cursor: pointer; padding: 0; background: none; }
+  .tb-color-wrap input[type="text"] { width: 78px; border: none; background: none; font-size: 12px; font-family: 'JetBrains Mono', monospace; color: var(--fg); outline: none; }
+
+  .tb-text-ctrl { width: 140px; padding: 6px 9px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; background: var(--bg); color: var(--fg); outline: none; }
+  .tb-text-ctrl:focus { border-color: var(--primary); }
+
+  .tb-presets { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tb-preset-btn { padding: 8px 10px; border-radius: 8px; border: 1.5px solid var(--border); font-size: 12px; font-weight: 500; cursor: pointer; background: var(--bg); color: var(--fg); display: flex; align-items: center; gap: 7px; transition: all .15s; }
+  .tb-preset-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .tb-preset-btn.active { border-color: var(--primary); background: color-mix(in oklab, var(--primary) 15%, transparent); color: var(--primary); }
+  .tb-pdot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  .tb-fixed { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 18px; }
+  .tb-fixed-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border-bottom: 1px solid var(--border); }
+  .tb-fixed-row:last-child { border-bottom: none; }
+  .tb-fixed-name { font-size: 13px; font-weight: 500; color: var(--fg); }
+  .tb-fixed-badge { font-size: 11px; color: var(--muted); background: var(--bg); padding: 2px 8px; border-radius: 10px; border: 1px solid var(--border); }
+
+  .tb-field-card { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 8px; background: var(--bg); }
+  .tb-fc-head { display: flex; align-items: center; padding: 9px 10px; gap: 8px; cursor: pointer; }
+  .tb-fc-name { font-size: 13px; font-weight: 500; flex: 1; color: var(--fg); }
+  .tb-fc-badge { font-size: 11px; color: var(--muted); background: var(--card); padding: 2px 8px; border-radius: 10px; border: 1px solid var(--border); }
+  .tb-fc-del { background: none; border: none; cursor: pointer; color: #f87171; font-size: 18px; line-height: 1; padding: 0 4px; }
+  .tb-fc-body { padding: 10px; display: none; border-top: 1px solid var(--border); }
+  .tb-fc-body.open { display: block; }
+
+  .tb-mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  .tb-mini-label { display: block; font-size: 11px; font-weight: 500; color: var(--muted); margin-bottom: 3px; }
+  .tb-mini-input, .tb-mini-select { width: 100%; padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; background: var(--card); color: var(--fg); outline: none; }
+  .tb-mini-input:focus, .tb-mini-select:focus { border-color: var(--primary); }
+
+  .tb-toggle-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .tb-toggle-label { font-size: 12px; color: var(--fg); }
+  .tb-toggle { position: relative; width: 32px; height: 17px; display: inline-block; }
+  .tb-toggle input { opacity: 0; width: 0; height: 0; }
+  .tb-toggle-track { position: absolute; inset: 0; background: var(--border); border-radius: 17px; cursor: pointer; transition: .2s; }
+  .tb-toggle-track:before { content: ''; position: absolute; width: 13px; height: 13px; left: 2px; top: 2px; background: #fff; border-radius: 50%; transition: .2s; }
+  .tb-toggle input:checked + .tb-toggle-track { background: var(--primary); }
+  .tb-toggle input:checked + .tb-toggle-track:before { transform: translateX(15px); }
+
+  .tb-opt-row { display: flex; gap: 5px; margin-bottom: 5px; }
+  .tb-opt-input { flex: 1; padding: 5px 7px; border: 1px solid var(--border); border-radius: 5px; font-size: 12px; background: var(--card); color: var(--fg); outline: none; }
+  .tb-opt-del { background: none; border: none; color: #f87171; cursor: pointer; font-size: 16px; padding: 0 4px; }
+  .tb-add-opt { width: 100%; padding: 5px; border: 1px dashed var(--border); border-radius: 5px; font-size: 11px; color: var(--muted); cursor: pointer; background: none; }
+  .tb-add-opt:hover { border-color: var(--primary); color: var(--primary); }
+
+  .tb-add-field { width: 100%; padding: 10px; border: 1.5px dashed var(--border); border-radius: 8px; background: none; font-size: 13px; color: var(--muted); cursor: pointer; transition: all .15s; margin-top: 4px; }
+  .tb-add-field:hover { border-color: var(--primary); color: var(--primary); }
+  .tb-field-counter { font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px; }
+  .tb-empty { text-align: center; padding: 24px 12px; color: var(--muted); font-size: 13px; border: 1px dashed var(--border); border-radius: 8px; }
+
+  /* Preview column */
+  .tb-preview-panel { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .tb-preview-header { padding: 12px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .tb-preview-header h2 { font-size: 14px; font-weight: 600; margin: 0; }
+  .tb-preview-tabs { display: flex; gap: 3px; background: var(--bg); padding: 3px; border-radius: 6px; border: 1px solid var(--border); }
+  .tb-preview-tabs button { padding: 5px 12px; border: none; border-radius: 4px; font-size: 12px; cursor: pointer; background: none; color: var(--muted); transition: all .15s; }
+  .tb-preview-tabs button.active { background: var(--card); color: var(--fg); font-weight: 500; }
+  .tb-canvas { flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 32px; background: repeating-conic-gradient(color-mix(in oklab, var(--fg) 3%, transparent) 0% 25%, transparent 0% 50%) 50% / 20px 20px, var(--bg); min-height: 420px; }
+  .tb-widget-card { width: 100%; max-width: 380px; border-radius: 12px; padding: 28px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); }
+
+  .pv-field { margin-bottom: 12px; }
+  .pv-label { display: block; font-size: 12px; font-weight: 500; margin-bottom: 4px; }
+  .pv-input, .pv-select { width: 100%; padding: 9px 11px; font-size: 13px; border-radius: 7px; border: 1px solid #d1d5db; outline: none; box-sizing: border-box; background: #fff; color: #111827; }
+  .pv-btn { width: 100%; padding: 10px; border: none; border-radius: 7px; font-size: 13px; font-weight: 500; cursor: default; }
+  .pv-tabs { display: flex; overflow: hidden; margin-bottom: 18px; }
+  .pv-tab { flex: 1; padding: 8px; font-size: 12px; font-weight: 500; border: none; cursor: default; background: transparent; }
+  .req-star { color: #ef4444; margin-left: 2px; }
+
+  .tb-code-section { border-top: 1px solid var(--border); flex-shrink: 0; }
+  .tb-code-header { padding: 10px 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+  .tb-code-header h3 { font-size: 13px; font-weight: 600; margin: 0; }
+  .tb-copy-btn { padding: 6px 14px; background: black; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 500; }
+  .tb-copy-btn.copied { background: #16a34a; color: #fff; }
+  .tb-code-section pre { padding: 14px 18px; font-size: 11.5px; line-height: 1.75; overflow-x: auto; background: var(--bg); max-height: 180px; margin: 0; }
+  .tb-code-section code { font-family: 'JetBrains Mono', monospace; color: var(--fg); }
+  .tb-code-section .ca { color: #a78bfa; }
+  .tb-code-section .cv { color: #4ade80; }
+  .tb-code-section .ct { color: #60a5fa; }
+</style>
+</head>
+<body>
+
+  <div class="app">
+    <!-- ============ SIDEBAR (EJS partial: layouts/sidebar) ============ -->
+    <aside class="sidebar">
+      <%- include('partials/sidebar') %>
+    </aside>
+
+    <div class="main">
+      
+      <!-- ============ TOPBAR (EJS partial: layouts/topbar) ============ -->
+      <header class="topbar">
+        <%- include('partials/header') %>
+      </header>
+
+      <main class="page">
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/app/overview.html">Dashboard</a><span class="sep">/</span><span class="current">Widget builder</span></nav>
+
+        <div class="page-head">
+          <div>
+            <h1>Widget builder</h1>
+            <p>Customize the pre-built auth widget your users see — theme, fields and embed code.</p>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-secondary" id="tb-reset-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>
+              </svg> Reset
+            </button>
+            <button class="btn btn-primary" id="tb-save-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m5 12 5 5L20 7"/>
+              </svg> Save customization
+            </button>
+          </div>
+        </div>
+
+        <div class="tb-wrap">
+          <!-- LEFT PANEL -->
+          <div class="tb-panel">
+            <div class="tb-tabs">
+              <button class="tb-tab active" id="ptab-theme">🎨 Theme</button>
+              <button class="tb-tab" id="ptab-fields">⚙️ Fields</button>
+            </div>
+
+            <div class="tb-body" id="tab-theme">
+              <div class="tb-section">
+                <div class="tb-section-title">Presets</div>
+                <div class="tb-presets">
+                  <button class="tb-preset-btn active" id="preset-default"><span class="tb-pdot" style="background:#3b82f6"></span>Default</button>
+                  <button class="tb-preset-btn" id="preset-dark"><span class="tb-pdot" style="background:#6366f1"></span>Dark</button>
+                  <button class="tb-preset-btn" id="preset-purple"><span class="tb-pdot" style="background:#7c3aed"></span>Purple</button>
+                  <button class="tb-preset-btn" id="preset-green"><span class="tb-pdot" style="background:#16a34a"></span>Green</button>
+                  <button class="tb-preset-btn" id="preset-rose"><span class="tb-pdot" style="background:#e11d48"></span>Rose</button>
+                  <button class="tb-preset-btn" id="preset-orange"><span class="tb-pdot" style="background:#ea580c"></span>Orange</button>
+                </div>
+              </div>
+
+              <div class="tb-section">
+                <div class="tb-section-title">Brand</div>
+                <div class="tb-row"><div><div class="tb-row-label">App name</div><span class="tb-row-hint">Shows in widget footer</span></div><input disabled type="text" class="tb-text-ctrl" id="c-app-name" value="AUTHKIT"/></div>
+                <div class="tb-row"><div><div class="tb-row-label">Border radius</div><span class="tb-row-hint">Buttons, inputs, modal</span></div><input type="text" class="tb-text-ctrl" id="c-radius" value="8px"/></div>
+                <div class="tb-row"><div><div class="tb-row-label">Overlay</div><span class="tb-row-hint">Backdrop behind modal</span></div><input type="text" class="tb-text-ctrl" id="c-overlay" value="rgba(0,0,0,0.5)"/></div>
+              </div>
+
+              <div class="tb-section">
+                <div class="tb-section-title">Colors</div>
+                <div class="tb-row"><div><div class="tb-row-label">Primary</div><span class="tb-row-hint">Buttons, links, active tab</span></div><div class="tb-color-wrap"><input type="color" id="col-primary" value="#3b82f6"/><input type="text" class="tb-hex" data-col="col-primary" value="#3b82f6" maxlength="7"/></div></div>
+                <div class="tb-row"><div><div class="tb-row-label">Primary hover</div></div><div class="tb-color-wrap"><input type="color" id="col-primary-hover" value="#2563eb"/><input type="text" class="tb-hex" data-col="col-primary-hover" value="#2563eb" maxlength="7"/></div></div>
+                <div class="tb-row"><div><div class="tb-row-label">Button text</div></div><div class="tb-color-wrap"><input type="color" id="col-primary-text" value="#ffffff"/><input type="text" class="tb-hex" data-col="col-primary-text" value="#ffffff" maxlength="7"/></div></div>
+                <div class="tb-row"><div><div class="tb-row-label">Modal background</div></div><div class="tb-color-wrap"><input type="color" id="col-bg" value="#ffffff"/><input type="text" class="tb-hex" data-col="col-bg" value="#ffffff" maxlength="7"/></div></div>
+                <div class="tb-row"><div><div class="tb-row-label">Main text</div></div><div class="tb-color-wrap"><input type="color" id="col-text" value="#111827"/><input type="text" class="tb-hex" data-col="col-text" value="#111827" maxlength="7"/></div></div>
+                <div class="tb-row"><div><div class="tb-row-label">Secondary text</div><span class="tb-row-hint">Labels, subtitles</span></div><div class="tb-color-wrap"><input type="color" id="col-text-secondary" value="#6b7280"/><input type="text" class="tb-hex" data-col="col-text-secondary" value="#6b7280" maxlength="7"/></div></div>
+                <div class="tb-row"><div><div class="tb-row-label">Muted text</div><span class="tb-row-hint">Placeholders, footer</span></div><div class="tb-color-wrap"><input type="color" id="col-text-muted" value="#9ca3af"/><input type="text" class="tb-hex" data-col="col-text-muted" value="#9ca3af" maxlength="7"/></div></div>
+              </div>
+
+              <div class="tb-section">
+                <div class="tb-section-title">Inputs</div>
+                <div class="tb-row"><div><div class="tb-row-label">Input background</div></div><div class="tb-color-wrap"><input type="color" id="col-input-bg" value="#ffffff"/><input type="text" class="tb-hex" data-col="col-input-bg" value="#ffffff" maxlength="7"/></div></div>
+                <div class="tb-row"><div><div class="tb-row-label">Input border</div></div><div class="tb-color-wrap"><input type="color" id="col-input-border" value="#d1d5db"/><input type="text" class="tb-hex" data-col="col-input-border" value="#d1d5db" maxlength="7"/></div></div>
+                <div class="tb-row"><div><div class="tb-row-label">Input text</div></div><div class="tb-color-wrap"><input type="color" id="col-input-text" value="#111827"/><input type="text" class="tb-hex" data-col="col-input-text" value="#111827" maxlength="7"/></div></div>
+                <div class="tb-row"><div><div class="tb-row-label">Focus border</div></div><div class="tb-color-wrap"><input type="color" id="col-input-focus" value="#3b82f6"/><input type="text" class="tb-hex" data-col="col-input-focus" value="#3b82f6" maxlength="7"/></div></div>
+                <div class="tb-row"><div><div class="tb-row-label">Card border</div><span class="tb-row-hint">Tabs, dividers</span></div><div class="tb-color-wrap"><input type="color" id="col-border" value="#e5e7eb"/><input type="text" class="tb-hex" data-col="col-border" value="#e5e7eb" maxlength="7"/></div></div>
+              </div>
+            </div>
+
+            <div class="tb-body" id="tab-fields" style="display:none;">
+              <div class="tb-section">
+                <div class="tb-section-title">Always included</div>
+                <div class="tb-fixed">
+                  <div class="tb-fixed-row"><span class="tb-fixed-name">Email</span><span class="tb-fixed-badge">email · required</span></div>
+                  <div class="tb-fixed-row"><span class="tb-fixed-name">Password</span><span class="tb-fixed-badge">password · required</span></div>
+                  <div class="tb-fixed-row"><span class="tb-fixed-name">Confirm Password</span><span class="tb-fixed-badge">register only</span></div>
+                </div>
+              </div>
+
+              <div class="tb-section">
+                <div class="tb-section-title">Custom fields</div>
+                <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Extra fields shown on the register form. Stored in the end user's metadata.</p>
+                <div id="field-list"></div>
+                <button class="tb-add-field" id="add-field-btn">+ Add field</button>
+                <p class="tb-field-counter" id="field-counter"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: PREVIEW + CODE -->
+          <div class="tb-preview-panel">
+            <div class="tb-preview-header">
+              <h2>Live preview</h2>
+              <div class="tb-preview-tabs">
+                <button class="active" id="pvtab-login">Sign in</button>
+                <button id="pvtab-register">Register</button>
+                <button id="pvtab-forgot">Forgot</button>
+              </div>
+            </div>
+
+            <div class="tb-canvas" id="canvas">
+              <div class="tb-widget-card" id="preview-card">
+                <div style="text-align:center;margin-bottom:20px;">
+                  <div id="pv-logo" style="width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" id="pv-logo-svg" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  </div>
+                  <p id="pv-subtitle" style="margin:0;font-size:13px;"></p>
+                </div>
+
+                <div id="pv-tabs" class="pv-tabs" style="border-radius:8px;overflow:hidden;border:1px solid #e5e7eb;">
+                  <button id="pv-tab-login" class="pv-tab">Sign in</button>
+                  <button id="pv-tab-reg" class="pv-tab">Create account</button>
+                </div>
+
+                <div id="pv-login">
+                  <form action="">
+                    <div class="pv-field"><label class="pv-label" id="pvl-email">Email</label><input class="pv-input" type="text" placeholder="name@example.com" readonly/></div>
+                    <div class="pv-field">
+                      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                        <label class="pv-label" id="pvl-pass" style="margin:0;">Password</label>
+                        <a id="pv-forgot-link" href="#" style="font-size:11px;text-decoration:none;" onclick="return false">Forgot password?</a>
+                      </div>
+                      <input class="pv-input" type="password" placeholder="••••••••" readonly autocomplete/>
+                    </div>
+                    <button class="pv-btn" id="pv-btn-login">Sign in</button>
+                  </form>
+                </div>
+
+                <div id="pv-register" style="display:none;">
+                  <form action="">
+                    <div class="pv-field"><label class="pv-label" id="pvr-email">Email</label><input class="pv-input" type="text" placeholder="name@example.com" readonly/></div>
+                    <div class="pv-field"><label class="pv-label" id="pvr-pass">Password</label><input class="pv-input" type="password" placeholder="Min. 8 characters" readonly autocomplete/></div>
+                    <div class="pv-field"><label class="pv-label" id="pvr-confirm">Confirm password</label><input class="pv-input" type="password" placeholder="••••••••" readonly autocomplete/></div>
+                    <div id="pv-custom-fields"></div>
+                    <button class="pv-btn" id="pv-btn-reg">Create account</button>
+                  </form>
+                </div>
+
+                <div id="pv-forgot" style="display:none;">
+                  <div class="pv-field"><label class="pv-label" id="pvf-email">Email</label><input class="pv-input" type="text" placeholder="name@example.com" readonly/></div>
+                  <button class="pv-btn" id="pv-btn-forgot">Send reset link</button>
+                </div>
+
+                <p id="pv-footer" style="text-align:center;font-size:11px;margin-top:18px;margin-bottom:0;">Protected by <span id="pv-footer-name" style="font-weight:500;"></span></p>
+              </div>
+            </div>
+
+            <div class="tb-code-section">
+              <div class="tb-code-header">
+                <h3>Embed code</h3>
+                <button class="tb-copy-btn" id="copy-btn">Copy</button>
+              </div>
+              <pre><code id="code-out"></code></pre>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/assets/js/app.js"></script>
+  <script>
+    (function(){
+    let fields = [];
+    let fieldId = 0;
+    let activePreviewTab = 'login';
+    let count = 0;
+
+    let DEFAULTS = {
+      appName:'AUTHKIT', radius:'8px', overlay:'rgba(0,0,0,0.5)',
+      primary:'#3b82f6', primaryHover:'#2563eb', primaryText:'#ffffff',
+      bg:'#ffffff', text:'#111827', textSecondary:'#6b7280', textMuted:'#9ca3af',
+      inputBg:'#ffffff', inputBorder:'#d1d5db', inputText:'#111827',
+      inputFocus:'#3b82f6', border:'#e5e7eb'
+    };
+
+    let PRESETS = {
+      'default': Object.assign({}, DEFAULTS),
+      'dark':    { appName:'AUTHKIT', radius:'8px', overlay:'rgba(0,0,0,0.7)', primary:'#6366f1', primaryHover:'#4f46e5', primaryText:'#ffffff', bg:'#1e1e2e', text:'#cdd6f4', textSecondary:'#9399b2', textMuted:'#6c7086', inputBg:'#313244', inputBorder:'#45475a', inputText:'#cdd6f4', inputFocus:'#6366f1', border:'#313244' },
+      'purple':  { appName:'AUTHKIT', radius:'10px', overlay:'rgba(76,29,149,0.35)', primary:'#7c3aed', primaryHover:'#6d28d9', primaryText:'#ffffff', bg:'#faf5ff', text:'#1e1b4b', textSecondary:'#6b21a8', textMuted:'#a78bfa', inputBg:'#ffffff', inputBorder:'#ddd6fe', inputText:'#1e1b4b', inputFocus:'#7c3aed', border:'#ede9fe' },
+      'green':   { appName:'AUTHKIT', radius:'6px', overlay:'rgba(0,0,0,0.45)', primary:'#16a34a', primaryHover:'#15803d', primaryText:'#ffffff', bg:'#f0fdf4', text:'#14532d', textSecondary:'#166534', textMuted:'#86efac', inputBg:'#ffffff', inputBorder:'#bbf7d0', inputText:'#14532d', inputFocus:'#16a34a', border:'#dcfce7' },
+      'rose':    { appName:'AUTHKIT', radius:'12px', overlay:'rgba(0,0,0,0.5)', primary:'#e11d48', primaryHover:'#be123c', primaryText:'#ffffff', bg:'#fff1f2', text:'#881337', textSecondary:'#9f1239', textMuted:'#fda4af', inputBg:'#ffffff', inputBorder:'#fecdd3', inputText:'#881337', inputFocus:'#e11d48', border:'#ffe4e6' },
+      'orange':  { appName:'AUTHKIT', radius:'8px', overlay:'rgba(0,0,0,0.5)', primary:'#ea580c', primaryHover:'#c2410c', primaryText:'#ffffff', bg:'#fff7ed', text:'#7c2d12', textSecondary:'#9a3412', textMuted:'#fdba74', inputBg:'#ffffff', inputBorder:'#fed7aa', inputText:'#7c2d12', inputFocus:'#ea580c', border:'#ffedd5' }
+    };
+
+    function el(id){ return document.getElementById(id); }
+    function getVal(id){ return el(id) ? el(id).value : ''; }
+    function setVal(id, v){ if (el(id)) el(id).value = v; }
+    function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    function getTheme(){
+      return {
+        appName: getVal('c-app-name') || 'AUTHKIT',
+        radius:  getVal('c-radius') || '8px',
+        overlay: getVal('c-overlay') || 'rgba(0,0,0,0.5)',
+        primary: getVal('hex-primary') || '#3b82f6',
+        primaryHover: getVal('hex-primary-hover') || '#2563eb',
+        primaryText:  getVal('hex-primary-text') || '#ffffff',
+        bg:      getVal('hex-bg') || '#ffffff',
+        text:    getVal('hex-text') || '#111827',
+        textSecondary: getVal('hex-text-secondary') || '#6b7280',
+        textMuted:     getVal('hex-text-muted') || '#9ca3af',
+        inputBg: getVal('hex-input-bg') || '#ffffff',
+        inputBorder: getVal('hex-input-border') || '#d1d5db',
+        inputText:   getVal('hex-input-text') || '#111827',
+        inputFocus:  getVal('hex-input-focus') || '#3b82f6',
+        border:      getVal('hex-border') || '#e5e7eb'
+      };
+    }
+
+    // Panel tabs
+    el('ptab-theme').addEventListener('click', function(){
+      el('tab-theme').style.display='block'; el('tab-fields').style.display='none';
+      el('ptab-theme').classList.add('active'); el('ptab-fields').classList.remove('active');
+    });
+    el('ptab-fields').addEventListener('click', function(){
+      el('tab-fields').style.display='block'; el('tab-theme').style.display='none';
+      el('ptab-fields').classList.add('active'); el('ptab-theme').classList.remove('active');
+    });
+
+    // Color <-> hex sync
+    document.querySelectorAll('input.tb-hex').forEach(function(hexEl){
+      let colId = hexEl.getAttribute('data-col');
+      let colEl = el(colId);
+      hexEl.id = 'hex-' + colId.replace('col-','');
+      colEl.addEventListener('input', function(){ hexEl.value = colEl.value; clearActivePreset(); updateAll(); });
+      hexEl.addEventListener('input', function(){
+        if (/^#[0-9a-fA-F]{6}$/.test(hexEl.value)) colEl.value = hexEl.value;
+        clearActivePreset(); updateAll();
+      });
+    });
+    ['c-app-name','c-radius','c-overlay'].forEach(function(id){ el(id).addEventListener('input', updateAll); });
+
+    function clearActivePreset(){ document.querySelectorAll('.tb-preset-btn').forEach(function(b){ b.classList.remove('active'); }); }
+
+    Object.keys(PRESETS).forEach(function(name){
+      el('preset-' + name).addEventListener('click', function(){ applyPreset(name); });
+    });
+
+    function applyPreset(name){
+      let p = PRESETS[name]; if (!p) return;
+      setVal('c-app-name', p.appName); setVal('c-radius', p.radius); setVal('c-overlay', p.overlay);
+      let keys   = ['primary','primaryHover','primaryText','bg','text','textSecondary','textMuted','inputBg','inputBorder','inputText','inputFocus','border'];
+      let colIds = ['primary','primary-hover','primary-text','bg','text','text-secondary','text-muted','input-bg','input-border','input-text','input-focus','border'];
+      keys.forEach(function(key, i){
+        let val = p[key];
+        let colEl = el('col-' + colIds[i]);
+        let hexEl = el('hex-' + colIds[i]);
+        if (colEl && val && val.startsWith('#')) colEl.value = val;
+        if (hexEl) hexEl.value = val || '';
+      });
+      clearActivePreset();
+      el('preset-' + name).classList.add('active');
+      updateAll();
+    }
+
+    // Fields
+    el('add-field-btn').addEventListener('click', function(){
+      setTimeout(function(){ toggleCard(id); }, 30);
+      if (fields.length >= 15) { alert('Maximum 15 custom fields allowed'); return; }
+      let id = ++fieldId;
+      fields.push({ id:id, name:'', label:'', type:'text', required:false, placeholder:'', showOn:'register', options:[] });
+      renderFieldList();
+      updateAll();
+    });
+
+    el('tb-save-btn').addEventListener('click', async () =>{
+      const url = "http://localhost:5000";
+      const endPoint = "dashboard/saveWidgetConfig";
+      const option = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({fields})
+      };
+
+      if(fields.length <= 0) throw new Error("Can not save an empty field..");
+
+      const fieldData = fields.map(({id, ...rest}) => rest);
+
+      try{
+        const req = await fetch(`${url}/${endPoint}`, option);
+        const res = await req.json();
+        console.log(res);
+      }catch(err) {
+        console.log(err);
+      }
+    });
+
+    window.tbRemoveField = function(id){ fields = fields.filter(function(f){ return f.id !== id; }); renderFieldList(); updateAll(); };
+    window.tbToggleCard = function(id){ toggleCard(id); };
+    function toggleCard(id){ let b = el('fb-body-'+id); if (b) b.classList.toggle('open'); }
+    window.tbUpdateFieldProp = function(id, key, value){
+      let f = fields.find(function(x){ return x.id === id; }); if (!f) return;
+      f[key] = value;
+      if (key === 'label' && !f._nameTouched) {
+        f.name = value.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'');
+        let n = el('fb-name-'+id); if (n) n.value = f.name;
+      }
+      if (key === 'name') f._nameTouched = true;
+      if (key === 'type') { let o = el('fb-opts-'+id); if (o) o.style.display = value === 'select' ? 'block' : 'none'; }
+      let t = el('fb-title-'+id), b = el('fb-badge-'+id);
+      if (t) t.textContent = f.label || 'Untitled field';
+      if (b) b.textContent = f.type + (f.required ? ' · required' : '');
+      updateAll();
+    };
+    window.tbAddOption = function(fid){ let f = fields.find(function(x){ return x.id === fid; }); if (f) { f.options.push(''); renderOptions(fid); } };
+    window.tbRemoveOption = function(fid, idx){ let f = fields.find(function(x){ return x.id === fid; }); if (f) { f.options.splice(idx,1); renderOptions(fid); updateAll(); } };
+    window.tbUpdateOption = function(fid, idx, val){ let f = fields.find(function(x){ return x.id === fid; }); if (f) { f.options[idx] = val; updateAll(); } };
+
+    function renderOptions(fid){
+      let c = el('fb-opt-list-'+fid); if (!c) return;
+      let f = fields.find(function(x){ return x.id === fid; }); if (!f) return;
+      c.innerHTML = f.options.map(function(opt, idx){
+        return '<div class="tb-opt-row">' +
+          '<input class="tb-opt-input" type="text" value="'+escHtml(opt)+'" placeholder="Option '+(idx+1)+'" onchange="tbUpdateOption('+fid+','+idx+',this.value)"/>' +
+          '<button class="tb-opt-del" onclick="tbRemoveOption('+fid+','+idx+')">×</button>' +
+        '</div>';
+      }).join('');
+    }
+
+    function renderFieldList(){
+      let c = el('field-list'), counter = el('field-counter');
+      if (fields.length === 0) { c.innerHTML = '<div class="tb-empty">No custom fields yet. Click below to add one.</div>'; counter.textContent = ''; return; }
+      c.innerHTML = fields.map(function(f){
+        return '<div class="tb-field-card" id="fb-card-'+f.id+'">' +
+          '<div class="tb-fc-head" onclick="tbToggleCard('+f.id+')">' +
+            '<span class="tb-fc-name" id="fb-title-'+f.id+'">'+escHtml(f.label || 'Untitled field')+'</span>' +
+            '<span class="tb-fc-badge" id="fb-badge-'+f.id+'">'+f.type+(f.required?' · required':'')+'</span>' +
+            '<button class="tb-fc-del" onclick="event.stopPropagation();tbRemoveField('+f.id+')">×</button>' +
+          '</div>' +
+          '<div class="tb-fc-body" id="fb-body-'+f.id+'">' +
+            '<div class="tb-mini-grid">' +
+              '<div><label class="tb-mini-label">Label</label><input class="tb-mini-input" type="text" value="'+escHtml(f.label)+'" placeholder="Full Name" oninput="tbUpdateFieldProp('+f.id+',\'label\',this.value)"/></div>' +
+              '<div><label class="tb-mini-label">Field key</label><input class="tb-mini-input" type="text" id="fb-name-'+f.id+'" value="'+escHtml(f.name)+'" placeholder="fullName" oninput="tbUpdateFieldProp('+f.id+',\'name\',this.value)"/></div>' +
+            '</div>' +
+            '<div class="tb-mini-grid">' +
+              '<div><label class="tb-mini-label">Type</label><select class="tb-mini-select" onchange="tbUpdateFieldProp('+f.id+',\'type\',this.value)">' +
+                ['text','email','tel','number','select','checkbox','date'].map(function(t){ return '<option value="'+t+'"'+(f.type===t?' selected':'')+'>'+t+'</option>'; }).join('') +
+              '</select></div>' +
+              '<div><label class="tb-mini-label">Show on</label><select class="tb-mini-select" onchange="tbUpdateFieldProp('+f.id+',\'showOn\',this.value)">' +
+                '<option value="register"'+(f.showOn==='register'?' selected':'')+'>Register only</option>' +
+                '<option value="both"'+(f.showOn==='both'?' selected':'')+'>Login + Register</option>' +
+              '</select></div>' +
+            '</div>' +
+            '<div style="margin-bottom:8px;"><label class="tb-mini-label">Placeholder</label><input class="tb-mini-input" type="text" value="'+escHtml(f.placeholder||'')+'" placeholder="e.g. Enter your name" oninput="tbUpdateFieldProp('+f.id+',\'placeholder\',this.value)"/></div>' +
+            '<div class="tb-toggle-row"><span class="tb-toggle-label">Required</span><label class="tb-toggle"><input type="checkbox" '+(f.required?'checked':'')+' onchange="tbUpdateFieldProp('+f.id+',\'required\',this.checked)"/><span class="tb-toggle-track"></span></label></div>' +
+            '<div id="fb-opts-'+f.id+'" style="display:'+(f.type==='select'?'block':'none')+'">' +
+              '<div class="tb-mini-label" style="margin-bottom:6px;">Options</div>' +
+              '<div id="fb-opt-list-'+f.id+'"></div>' +
+              '<button class="tb-add-opt" onclick="tbAddOption('+f.id+')">+ Add option</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+      fields.forEach(function(f){ if (f.type === 'select') renderOptions(f.id); });
+      counter.textContent = fields.length + ' / 15 fields';
+    }
+
+    // Preview tabs
+    el('pvtab-login').addEventListener('click', function(){ setPreviewTab('login'); });
+    el('pvtab-register').addEventListener('click', function(){ setPreviewTab('register'); });
+    el('pvtab-forgot').addEventListener('click', function(){ setPreviewTab('forgot'); });
+
+    function setPreviewTab(tab){
+      activePreviewTab = tab;
+      ['login','register','forgot'].forEach(function(t){
+        el('pvtab-'+t).classList.toggle('active', t === tab);
+        el('pv-'+t).style.display = t === tab ? 'block' : 'none';
+      });
+      el('pv-tabs').style.display = tab === 'forgot' ? 'none' : 'flex';
+      updateAll();
+    }
+
+    function updateAll(){ let v = getTheme(); applyThemeToPreview(v); renderCustomFieldsPreview(v); generateCode(v); }
+
+    function applyThemeToPreview(v){
+      let card = el('preview-card');
+      let r = v.radius;
+      card.style.background = v.bg;
+      card.style.borderRadius = 'calc(' + r + ' * 1.5)';
+      el('pv-logo').style.background = v.primary + '22';
+      el('pv-logo').style.borderRadius = r;
+      el('pv-logo-svg').setAttribute('stroke', v.primary);
+      let subs = { login:'Sign in to continue', register:'Create your account', forgot:'Reset your password' };
+      el('pv-subtitle').textContent = subs[activePreviewTab];
+      el('pv-subtitle').style.color = v.textSecondary;
+      el('pv-tabs').style.border = '1px solid ' + v.border;
+      el('pv-tabs').style.borderRadius = r;
+      let isL = activePreviewTab === 'login', isR = activePreviewTab === 'register';
+      el('pv-tab-login').style.background = isL ? v.primary : 'transparent';
+      el('pv-tab-login').style.color = isL ? v.primaryText : v.textSecondary;
+      el('pv-tab-reg').style.background = isR ? v.primary : 'transparent';
+      el('pv-tab-reg').style.color = isR ? v.primaryText : v.textSecondary;
+      ['pvl-email','pvl-pass','pvr-email','pvr-pass','pvr-confirm','pvf-email'].forEach(function(id){ if (el(id)) el(id).style.color = v.textSecondary; });
+      document.querySelectorAll('#preview-card .pv-input, #preview-card .pv-select').forEach(function(inp){
+        inp.style.background = v.inputBg; inp.style.borderColor = v.inputBorder; inp.style.color = v.inputText; inp.style.borderRadius = r;
+      });
+      if (el('pv-forgot-link')) el('pv-forgot-link').style.color = v.primary;
+      ['pv-btn-login','pv-btn-reg','pv-btn-forgot'].forEach(function(id){
+        if (el(id)) { el(id).style.background = v.primary; el(id).style.color = v.primaryText; el(id).style.borderRadius = r; }
+      });
+      el('pv-footer').style.color = v.textMuted;
+      el('pv-footer-name').textContent = v.appName;
+      el('pv-footer-name').style.color = v.primary;
+    }
+
+    function renderCustomFieldsPreview(v){
+      let c = el('pv-custom-fields'); if (!c) return;
+      let regFields = fields.filter(function(f){ return f.showOn === 'register' || f.showOn === 'both'; });
+      if (regFields.length === 0) { c.innerHTML = ''; return; }
+      c.innerHTML = regFields.map(function(f){
+        let label = '<label class="pv-label" style="color:'+v.textSecondary+'">' + escHtml(f.label || 'Field') + (f.required ? '<span class="req-star">*</span>' : '') + '</label>';
+        let style = 'background:'+v.inputBg+';border-color:'+v.inputBorder+';color:'+v.inputText+';border-radius:'+v.radius;
+        if (f.type === 'checkbox') {
+          return '<div class="pv-field" style="display:flex;align-items:center;gap:8px;"><input type="checkbox" disabled/><span style="font-size:13px;color:'+v.text+'">'+escHtml(f.label || 'Checkbox')+(f.required?'<span class="req-star">*</span>':'')+'</span></div>';
+        }
+        if (f.type === 'select') {
+          let opts = (f.options||[]).map(function(o){ return '<option>'+escHtml(o)+'</option>'; }).join('');
+          return '<div class="pv-field">'+label+'<select class="pv-select" style="'+style+'"><option>'+escHtml(f.placeholder||'Select...')+'</option>'+opts+'</select></div>';
+        }
+        return '<div class="pv-field">'+label+'<input class="pv-input" type="'+f.type+'" placeholder="'+escHtml(f.placeholder||'')+'" readonly style="'+style+'"/></div>';
+      }).join('');
+    }
+
+    function generateCode(v){
+      let D = DEFAULTS;
+      let lines = ['<span class="ct">&lt;script</span>'];
+      lines.push('  <span class="ca">src</span>=<span class="cv">"https://yourdomain.com/widget/widget.js"</span>');
+      lines.push('  <span class="ca">data-api-key</span>=<span class="cv">"ak_live_your_key_here"</span>');
+      let pairs = [
+        ['appName','data-app-name'],['primary','data-primary'],['primaryHover','data-primary-hover'],['primaryText','data-primary-text'],
+        ['bg','data-bg'],['overlay','data-overlay'],['text','data-text'],['textSecondary','data-text-secondary'],['textMuted','data-text-muted'],
+        ['inputBg','data-input-bg'],['inputBorder','data-input-border'],['inputText','data-input-text'],['inputFocus','data-input-border-focus'],
+        ['border','data-border'],['radius','data-radius']
+      ];
+      pairs.forEach(function(p){ if (v[p[0]] !== D[p[0]]) lines.push('  <span class="ca">'+p[1]+'</span>=<span class="cv">"'+v[p[0]]+'"</span>'); });
+      let valid = fields.filter(function(f){ return f.name && f.label; });
+      if (valid.length){
+        let cleaned = valid.map(function(f){
+          let o = { name:f.name, label:f.label, type:f.type };
+          if (f.required) o.required = true;
+          if (f.placeholder) o.placeholder = f.placeholder;
+          if (f.showOn !== 'register') o.showOn = f.showOn;
+          if (f.type === 'select' && f.options.length) o.options = f.options.filter(Boolean);
+          return o;
+        });
+        lines.push("  <span class='ca'>data-fields</span>=<span class='cv'>'"+escHtml(JSON.stringify(cleaned))+"'</span>");
+      }
+      lines.push('<span class="ct">&gt;&lt;/script&gt;</span>');
+      el('code-out').innerHTML = lines.join('\n');
+    }
+
+    el('copy-btn').addEventListener('click', function(){
+      let raw = el('code-out').innerText;
+      navigator.clipboard.writeText(raw).then(function(){
+        let b = el('copy-btn'); b.textContent = 'Copied!'; b.classList.add('copied');
+        setTimeout(function(){ b.textContent = 'Copy'; b.classList.remove('copied'); }, 2000);
+      });
+    });
+
+    let resetBtn = document.getElementById('tb-reset-btn');
+    if (resetBtn) resetBtn.addEventListener('click', function(){ fields = []; renderFieldList(); applyPreset('default'); });
+
+    applyPreset('default');
+    renderFieldList();
+  })();
+  </script>
+</body>
+

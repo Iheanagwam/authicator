@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <title>Developer Overview — AuthKit</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="AuthKit — drop-in authentication, users, and access control for modern apps." />
+  <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/base.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/layout.css" />
+  <link rel="stylesheet" href="/assets/css/pages.css" />
+</head>
+<body>
+
+  <div class="app">
+    
+    <!-- ============ SIDEBAR (EJS partial: layouts/sidebar) ============ -->
+    <aside class="sidebar">
+      <%- include('partials/sidebar') %>
+    </aside>
+
+    <div class="main">
+      <!-- ============ TOPBAR (EJS partial: layouts/topbar) ============ -->
+      <header class="topbar">
+        <%- include('partials/header') %>
+      </header>
+
+      <main class="page">
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/dashboard/overview">Dashboard</a><span class="sep">/</span><span class="current">Overview</span></nav>
+        
+        <div class="page-head">
+          <div>
+            <h1>Overview</h1>
+            <p>Real-time view of your identity infrastructure.</p>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-secondary">
+              <svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5M12 15V3"/>
+              </svg>Export CSV
+            </button>
+            <button class="btn btn-primary" data-modal-open="invite-modal">
+              <svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>Refer Someone
+            </button>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat">
+            <div class="between">
+              <div class="stat-label">Monthly Active Users</div>
+              <div class="stat-icon"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            </div>
+            <div class="stat-value"><%=userCount%></div>
+            <div class="stat-meta up"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m23 6-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg> <span>+12.4%</span> <span class="dim">vs last week</span></div>
+          </div>
+
+          <div class="stat">
+            <div class="between">
+              <div class="stat-label">Sign-ins Today</div>
+              <div class="stat-icon"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+            </div>
+            <div class="stat-value">8,412</div>
+            <div class="stat-meta up"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m23 6-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg> <span>+3.1%</span> <span class="dim">vs last week</span></div>
+          </div>
+
+          <div class="stat">
+            <div class="between">
+              <div class="stat-label">Successful MFA</div>
+              <div class="stat-icon"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            </div>
+            <div class="stat-value">2,104</div>
+            <div class="stat-meta up"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m23 6-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg> <span>+8.2%</span> <span class="dim">vs last week</span></div>
+          </div>
+
+          <div class="stat">
+            <div class="between">
+              <div class="stat-label">Failed Sign-ins</div>
+              <div class="stat-icon"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div>
+            </div>
+            <div class="stat-value">142</div>
+            <div class="stat-meta down"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m23 18-9.5-9.5-5 5L1 6"/><path d="M17 18h6v-6"/></svg> <span>-4.5%</span> <span class="dim">vs last week</span></div>
+          </div>
+        </div>
+
+        <div class="two-col" style="margin-bottom:20px;">
+          <div class="card">
+            <div class="card-header"><h3>User growth</h3>
+              <div class="tabs" data-tabs-group="ug" style="margin:0;border:0;">
+                <button data-tab="ug7" data-group="ug" class="active">7d</button>
+                <button data-tab="ug30" data-group="ug">30d</button>
+                <button data-tab="ug90" data-group="ug">90d</button>
+              </div>
+            </div>
+            <div class="card-body" style="height:280px;"><canvas id="chart-users"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Auth method mix</h3></div>
+            <div class="card-body" style="height:280px;"><canvas id="chart-methods"></canvas></div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header"><h3>Authentication events</h3><span class="badge badge-success badge-dot">Live</span></div>
+            <div class="card-body" style="height:260px;"><canvas id="chart-auth"></canvas></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><h3>Recent activity</h3><a href="/app/audit-logs.html" class="text-primary" style="font-size:12px;">View all</a></div>
+            <div class="card-body">
+              <div class="feed">
+                <div class="feed-item">
+                  <div class="fdot"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                  <div class="fbody">
+                    <div>New sign-up: <strong>maria@stripe.com</strong></div>
+                    <div class="ftime">2 minutes ago</div>
+                  </div>
+                </div>
+
+                <div class="feed-item">
+                  <div class="fdot"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                  <div class="fbody">
+                    <div>MFA enrolled for <strong>13 users</strong></div>
+                    <div class="ftime">12 minutes ago</div>
+                  </div>
+                </div>
+                <div class="feed-item">
+                  <div class="fdot"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 16.98h-5.99c-1.1 0-1.95.94-2.48 1.9A4 4 0 0 1 2 17c.01-.7.2-1.4.57-2"/><path d="m6 17 3.13-5.78c.53-.97.1-2.18-.5-3.1a4 4 0 1 1 6.89-4.06"/><path d="m12 6 3.13 5.73C15.66 12.7 16.9 13 18 13a4 4 0 0 1 0 8"/></svg></div>
+                  <div class="fbody">
+                    <div>Webhook <strong>wh_prod_billing</strong> delivered</div>
+                    <div class="ftime">24 minutes ago</div>
+                  </div>
+                </div>
+                <div class="feed-item">
+                  <div class="fdot"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 2l-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-2 2"/><path d="m18 5 3 3"/></svg></div>
+                  <div class="fbody">
+                    <div>API key <strong>ak_live_...4a2b</strong> rotated</div>
+                    <div class="ftime">1 hour ago</div>
+                  </div>
+                </div>
+                <div class="feed-item">
+                  <div class="fdot"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/><path d="M9 9h1M9 13h6M9 17h6"/></svg></div>
+                  <div class="fbody">
+                    <div>SAML SSO connected for <strong>Acme Corp</strong></div>
+                    <div class="ftime">2 hours ago</div>
+                  </div>
+                </div>
+
+                <div class="feed-item">
+                  <div class="fdot"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div>
+                  <div class="fbody">
+                    <div>Rate limit exceeded from IP <code>34.201.14.7</code></div>
+                    <div class="ftime">3 hours ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ Invite modal ============ -->
+        <div class="modal-backdrop" id="invite-modal">
+          <div class="modal">
+            <div class="modal-header"><h3>Refer Someone to Authkit</h3></div>
+            <div class="modal-body">
+              <div class="stack" style="--gap:14px;">
+                <div class="field">
+                  <label>Email</label>
+                  <input class="input" type="email" placeholder="teammate@company.com" />
+                </div>
+                <div class="field">
+                  <label>Send an email</label>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-ghost" data-modal-close>Cancel</button>
+              <button class="btn btn-primary" data-modal-close>Send invite</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script> -->
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/charts.js"></script>
+</body>
+</html>

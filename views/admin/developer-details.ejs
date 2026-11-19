@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Developer detail — AuthKit</title>
+<meta name="description" content="AuthKit — drop-in authentication, users, and access control for modern apps." />
+<link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/base.css" />
+<link rel="stylesheet" href="/assets/css/components.css" />
+<link rel="stylesheet" href="/assets/css/layout.css" />
+<link rel="stylesheet" href="/assets/css/pages.css" />
+
+</head>
+<body>
+
+<div class="app">
+  
+<!-- ============ SIDEBAR (EJS partial: layouts/admin-sidebar) ============ -->
+<aside class="sidebar admin">
+  <div class="sidebar-brand">
+    <span class="logo">A</span>
+    <span class="brand-name">AuthKit</span>
+    <span class="brand-tag">Admin</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-group-label">Workspace</div>
+    <a class="nav-item " href="/admin/overview.html"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Overview</span></a>
+<a class="nav-item active" href="/admin/developers.html"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg><span>Developers</span></a>
+<a class="nav-item " href="/admin/platform-users.html"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Platform Users</span></a>
+    <div class="nav-group-label">Developer</div>
+    <a class="nav-item " href="/admin/platform-audit-logs.html"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/><path d="M9 9h1M9 13h6M9 17h6"/></svg><span>Audit Logs</span></a>
+<a class="nav-item " href="#"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Security</span></a>
+    <div class="nav-group-label">Account</div>
+    <a class="nav-item " href="/admin/platform-settings.html"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.36.87 1.16 1.44 2 1.5H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="plan-card">
+      <small>Current plan</small>
+      <div class="between">
+        <strong style="font-size:13px;">Platform Admin</strong>
+        <a href="/pricing.html" class="text-primary" style="font-size:11px;">Manage</a>
+      </div>
+    </div>
+  </div>
+</aside>
+
+  <div class="main">
+    
+<!-- ============ TOPBAR (EJS partial: layouts/topbar) ============ -->
+<header class="topbar">
+  <button class="btn btn-icon btn-ghost mobile-toggle" data-sidebar-mobile aria-label="Toggle menu"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+  <button class="btn btn-icon btn-ghost" data-sidebar-collapse aria-label="Collapse sidebar"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+  <div class="search">
+    <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input class="input" placeholder="Search users, webhooks, logs..." />
+    <kbd>⌘K</kbd>
+  </div>
+  <div class="spacer"></div>
+  <div class="topbar-actions">
+    <button class="btn btn-icon btn-ghost" data-theme-toggle aria-label="Toggle theme"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></button>
+    <div class="dropdown">
+      <button class="btn btn-icon btn-ghost" data-dropdown aria-label="Notifications">
+        <svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        <span class="dot"></span>
+      </button>
+      <div class="dropdown-menu" style="min-width:320px;">
+        <div class="label">Notifications <!-- notifications.count --></div>
+        <a href="#"><div><strong style="font-size:12px;">New sign-in from Berlin</strong><div class="dim" style="font-size:11px;">User: sofia@acme.io · 2m ago</div></div></a>
+        <a href="#"><div><strong style="font-size:12px;">Webhook failed 3x</strong><div class="dim" style="font-size:11px;">wh_prod_billing · 12m ago</div></div></a>
+        <a href="#"><div><strong style="font-size:12px;">API key rotated</strong><div class="dim" style="font-size:11px;">by you · 1h ago</div></div></a>
+        <div class="sep"></div>
+        <a href="#" class="text-primary" style="justify-content:center;">View all</a>
+      </div>
+    </div>
+    <div class="dropdown">
+      <button class="profile-btn" data-dropdown>
+        <span class="avatar">JD</span>
+        <span class="name"><!-- user.name -->Jamie Doe</span>
+        <svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="dropdown-menu">
+        <div class="label">Signed in as</div>
+        <div style="padding:2px 10px 8px;">
+          <div style="font-size:13px;">Jamie Doe</div>
+          <div class="dim" style="font-size:11px;"><!-- user.email -->jamie@acme.io</div>
+          <span class="badge badge-admin" style="margin-top:6px;">Super Admin</span>
+        </div>
+        <div class="sep"></div>
+        <a href="/app/settings.html"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Profile</a>
+        <a href="/app/settings.html"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.36.87 1.16 1.44 2 1.5H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</a>
+        <a href="/docs.html"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg> Documentation</a>
+        <div class="sep"></div>
+        <a href="/auth/login.html"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg> Sign out</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+    <main class="page">
+      
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/admin/overview.html">Admin</a><span class="sep">/</span><a href="/admin/developers.html">Developers</a><span class="sep">/</span><span class="current">Acme Corporation</span></nav>
+<div class="detail-head">
+  <div class="avatar-lg" style="background:linear-gradient(135deg,var(--accent),#e879f9);">AC</div>
+  <div class="grow">
+    <div class="row"><h1 style="font-size:22px;">Acme Corporation</h1><span class="badge badge-admin">Enterprise</span><span class="badge badge-success badge-dot">Active</span></div>
+    <div class="dim" style="font-size:13px;">billing@acme.io · Signed up Mar 12, 2024 · Owner: Jamie Doe</div>
+  </div>
+  <div class="row">
+    <button class="btn btn-secondary"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg> Contact</button>
+    <button class="btn btn-danger" data-confirm="Suspend this developer? All apps will stop authenticating.">Suspend</button>
+  </div>
+</div>
+
+<div class="stats-grid" style="grid-template-columns:repeat(4,1fr);">
+  
+<div class="stat">
+  <div class="between">
+    <div class="stat-label">MAUs</div>
+    <div class="stat-icon"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+  </div>
+  <div class="stat-value">182,410</div>
+  <div class="stat-meta up"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m23 6-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg> <span>+2.4%</span> <span class="dim">vs last week</span></div>
+</div>
+
+  
+<div class="stat">
+  <div class="between">
+    <div class="stat-label">MRR</div>
+    <div class="stat-icon"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12V8H4a2 2 0 0 1 0-4h12v4"/><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></svg></div>
+  </div>
+  <div class="stat-value">$4,200</div>
+  <div class="stat-meta up"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m23 6-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg> <span>+$800</span> <span class="dim">vs last week</span></div>
+</div>
+
+  
+<div class="stat">
+  <div class="between">
+    <div class="stat-label">API calls (24h)</div>
+    <div class="stat-icon"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+  </div>
+  <div class="stat-value">4.2M</div>
+  <div class="stat-meta up"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m23 6-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg> <span>+8.1%</span> <span class="dim">vs last week</span></div>
+</div>
+
+  
+<div class="stat">
+  <div class="between">
+    <div class="stat-label">Webhooks</div>
+    <div class="stat-icon"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 16.98h-5.99c-1.1 0-1.95.94-2.48 1.9A4 4 0 0 1 2 17c.01-.7.2-1.4.57-2"/><path d="m6 17 3.13-5.78c.53-.97.1-2.18-.5-3.1a4 4 0 1 1 6.89-4.06"/><path d="m12 6 3.13 5.73C15.66 12.7 16.9 13 18 13a4 4 0 0 1 0 8"/></svg></div>
+  </div>
+  <div class="stat-value">12</div>
+  <div class="stat-meta up"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m23 6-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg> <span>+2</span> <span class="dim">vs last week</span></div>
+</div>
+
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-header"><h3>Projects</h3></div>
+    <table class="table">
+      <thead><tr><th>Project</th><th>Environment</th><th>MAUs</th><th>Created</th></tr></thead>
+      <tbody>
+        <tr><td>acme-web</td><td><span class="badge badge-primary">Production</span></td><td>142,111</td><td class="dim">Mar 12, 2024</td></tr>
+        <tr><td>acme-mobile</td><td><span class="badge badge-primary">Production</span></td><td>34,201</td><td class="dim">Jun 04, 2024</td></tr>
+        <tr><td>acme-admin</td><td><span class="badge">Staging</span></td><td>6,098</td><td class="dim">Sep 22, 2024</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-header"><h3>Billing</h3></div>
+    <div class="card-body stack" style="--gap:12px;">
+      <div class="between"><span>Plan</span><strong>Enterprise (annual)</strong></div>
+      <div class="between"><span>Next invoice</span><strong>Mar 12, 2027</strong></div>
+      <div class="between"><span>Payment method</span><span class="row"><svg class="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg> •• 4242</span></div>
+      <div class="between"><span>Lifetime value</span><strong>$92,400</strong></div>
+      <button class="btn btn-secondary btn-block">Open billing</button>
+    </div>
+  </div>
+</div>
+
+    </main>
+  </div>
+</div>
+
+<script src="/assets/js/app.js"></script>
+</body>
+</html>
